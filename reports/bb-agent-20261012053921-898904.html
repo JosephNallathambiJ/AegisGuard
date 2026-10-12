@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AegisGuard Audit Report - http://127.0.0.1:8000</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0b0f19; color: #f3f4f6; margin: 0; padding: 40px 20px; line-height: 1.6; }
+    .container { max-width: 900px; margin: 0 auto; background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 32px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    h1 { font-size: 1.6rem; color: #38bdf8; margin-top: 0; }
+    .meta-bar { display: flex; flex-wrap: wrap; gap: 16px; background: #0a0e17; padding: 12px 16px; border-radius: 8px; margin-bottom: 24px; font-size: 0.85rem; border: 1px solid #1e293b; }
+    .counts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 30px; }
+    .count-card { background: #141e33; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #1f2b42; }
+    .count-card h4 { margin: 0; font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; }
+    .count-card .val { font-size: 1.5rem; font-weight: bold; margin-top: 4px; }
+    .finding-block { background: #141e33; border: 1px solid #1f2b42; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+    .finding-block.critical { border-left: 4px solid #f43f5e; }
+    .finding-block.high { border-left: 4px solid #fb923c; }
+    .finding-block.medium { border-left: 4px solid #facc15; }
+    .finding-block.low { border-left: 4px solid #38bdf8; }
+    .finding-block.informational { border-left: 4px solid #818cf8; }
+    .finding-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .sev-tag { font-size: 0.7rem; font-weight: 800; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
+    .sev-tag.critical { background: rgba(244,63,94,0.2); color: #f43f5e; }
+    .sev-tag.high { background: rgba(251,146,60,0.2); color: #fb923c; }
+    .sev-tag.medium { background: rgba(250,204,21,0.2); color: #facc15; }
+    .sev-tag.low { background: rgba(56,189,248,0.2); color: #38bdf8; }
+    .sev-tag.informational { background: rgba(129,140,248,0.2); color: #818cf8; }
+    .finding-title { margin: 0; font-size: 1.1rem; color: #fff; }
+    .finding-meta { font-size: 0.8rem; color: #94a3b8; display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 12px; }
+    .evidence-box { background: #050811; border: 1px solid #111a2e; border-radius: 6px; padding: 12px; margin: 12px 0; }
+    .evidence-title { font-size: 0.7rem; color: #64748b; font-weight: 700; margin-bottom: 6px; }
+    pre { margin: 0; font-family: monospace; font-size: 0.82rem; color: #38bdf8; overflow-x: auto; white-space: pre-wrap; }
+    .remediation-box { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.3); border-radius: 6px; padding: 10px 14px; color: #6ee7b7; font-size: 0.88rem; }
+    .manual-box { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 6px; padding: 10px 14px; margin: 10px 0; font-size: 0.84rem; color: #fde047; }
+    code { font-family: monospace; color: #38bdf8; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AegisGuard Bug Bounty Security Audit Report</h1>
+    <div class="meta-bar">
+      <span><strong>Target:</strong> http://127.0.0.1:8000</span>
+      <span><strong>Program:</strong> HackerOne / Bugcrowd Authorized Assessment</span>
+      <span><strong>Audit ID:</strong> bb-agent-20261012053921-898904</span>
+      <span><strong>Generated:</strong> 2026-10-12T05:39:21.567643+00:00</span>
+    </div>
+
+    <div class="counts-grid">
+      <div class="count-card"><h4 style="color:#f43f5e">Critical</h4><div class="val" style="color:#f43f5e">1</div></div>
+      <div class="count-card"><h4 style="color:#fb923c">High</h4><div class="val" style="color:#fb923c">0</div></div>
+      <div class="count-card"><h4 style="color:#facc15">Medium</h4><div class="val" style="color:#facc15">0</div></div>
+      <div class="count-card"><h4 style="color:#38bdf8">Low</h4><div class="val" style="color:#38bdf8">0</div></div>
+      <div class="count-card"><h4 style="color:#818cf8">Informational</h4><div class="val" style="color:#818cf8">0</div></div>
+    </div>
+
+    <h2>Vulnerability Findings (1)</h2>
+    
+            <div class="finding-block critical">
+              <div class="finding-header">
+                <span class="sev-tag critical">Critical</span>
+                <span class="finding-num">#1</span>
+                <h3 class="finding-title">Missing or Weak SPF Email Authentication Record</h3>
+              </div>
+              <div class="finding-meta">
+                <span><strong>Endpoint:</strong> <code>127.0.0.1</code></span>
+                <span><strong>CWE:</strong> CWE-346</span>
+                <span><strong>Status:</strong> OBSERVED</span>
+                <span><strong>Confidence:</strong> 41%</span>
+              </div>
+              <p class="finding-desc">None</p>
+              <div class="evidence-box">
+                <div class="evidence-title">OBSERVED EVIDENCE</div>
+                <pre><code>No valid v=spf1 TXT record found for root hostname.</code></pre>
+              </div>
+              
+              <div class="remediation-box">
+                <strong>Remediation:</strong> Publish an SPF record ('v=spf1 ... -all') to protect against email spoofing.
+              </div>
+            </div>
+            
+  </div>
+</body>
+</html>

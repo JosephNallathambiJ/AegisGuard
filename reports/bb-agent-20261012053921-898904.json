@@ -1,0 +1,131 @@
+{
+  "scan_id": "bb-agent-20261012053921-898904",
+  "target_url": "http://127.0.0.1:8000",
+  "policy_profile": "Local Lab",
+  "timestamp": "2026-10-12T05:39:21.567643+00:00",
+  "duration_seconds": 0.09,
+  "status_code": 200,
+  "blocked_redirects_count": 0,
+  "scheduler_telemetry": {},
+  "metadata": {
+    "program": "HackerOne / Bugcrowd Authorized Assessment",
+    "hostname": "127.0.0.1",
+    "scheme": "http",
+    "port": 8000,
+    "policy_profile": "Local Lab",
+    "allow_local_lab": true,
+    "max_rps": 2.0,
+    "path": "/"
+  },
+  "severity_summary": {
+    "Critical": 1,
+    "High": 0,
+    "Medium": 0,
+    "Low": 0,
+    "Informational": 0
+  },
+  "total_findings": 1,
+  "ml_enhanced": true,
+  "agent_plan": {
+    "target_url": "http://127.0.0.1:8000",
+    "policy_profile": "Local Lab",
+    "planned_tools": [
+      "core_http_probes",
+      "whatweb",
+      "dns_recon",
+      "nmap_services",
+      "nikto_misconfig"
+    ],
+    "planning_rationale": [
+      "Target scheme: HTTP (Unencrypted transport)",
+      "Scope check verified via ScopeManager policies.",
+      "Enforcing non-destructive banner, header, and configuration audits only."
+    ],
+    "timestamp": "2026-10-12T05:39:21.568235+00:00"
+  },
+  "kali_tools_telemetry": {
+    "nmap": {
+      "tool": "nmap",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [],
+      "raw_output": "Python TCP socket connection probe completed for 127.0.0.1."
+    },
+    "whatweb": {
+      "tool": "whatweb",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [],
+      "raw_output": "Python HTTP response header technology audit completed."
+    },
+    "sslscan": {
+      "tool": "sslscan",
+      "status": "skipped_plain_http",
+      "findings": [],
+      "raw_output": "Target is not using HTTPS scheme."
+    },
+    "nikto": {
+      "tool": "nikto",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [],
+      "raw_output": "Python defensive misconfiguration probe completed."
+    },
+    "dnsrecon": {
+      "tool": "dnsrecon",
+      "mode": "kali_native",
+      "status": "completed",
+      "findings": [
+        {
+          "title": "Missing or Weak SPF Email Authentication Record",
+          "severity": "Low",
+          "cwe": "CWE-346",
+          "cvss": 3.8,
+          "confidence": 0.88,
+          "verification_status": "observed",
+          "endpoint": "127.0.0.1",
+          "parameter": "DNS TXT (SPF)",
+          "evidence": "No valid v=spf1 TXT record found for root hostname.",
+          "remediation": "Publish an SPF record ('v=spf1 ... -all') to protect against email spoofing.",
+          "tool_source": "dig-cli"
+        }
+      ],
+      "raw_output": ""
+    }
+  },
+  "llm_analysis": {
+    "executive_summary": "Authorized assessment for http://127.0.0.1:8000 identified 1 security observations (1 Critical, 0 High, 0 Medium, 0 Low). Overall security posture indicates a elevated risk posture requiring standard hardening.",
+    "risk_prioritization": "Elevated Priority - Address high-impact cryptographic and session configurations first.",
+    "remediation_roadmap": [
+      "Maintain routine defensive audits and scheduled vulnerability monitoring."
+    ],
+    "bug_bounty_draft": "**Title:** Missing or Weak SPF Email Authentication Record\n**Severity:** Critical\n**Vulnerability Type:** CWE-346\n**Target Asset:** 127.0.0.1\n\n**Description:**\nConfiguration weakness observed.\n\n**Evidence:**\n```\nNo valid v=spf1 TXT record found for root hostname.\n```\n\n**Remediation:**\nPublish an SPF record ('v=spf1 ... -all') to protect against email spoofing.",
+    "llm_engine_used": "Deterministic Defensive Intelligence Engine (Qwen3 offline fallback)"
+  },
+  "findings": [
+    {
+      "title": "Missing or Weak SPF Email Authentication Record",
+      "severity": "Critical",
+      "cwe": "CWE-346",
+      "cvss": 3.8,
+      "confidence": 0.41,
+      "verification_status": "observed",
+      "endpoint": "127.0.0.1",
+      "parameter": "DNS TXT (SPF)",
+      "evidence": "No valid v=spf1 TXT record found for root hostname.",
+      "remediation": "Publish an SPF record ('v=spf1 ... -all') to protect against email spoofing.",
+      "tool_source": "dig-cli",
+      "is_duplicate": false,
+      "duplicate_signature": "90a57262933be5d7a232eafc4ebd2088",
+      "ml_assessment": {
+        "ml_adjusted_severity": "Critical",
+        "ml_confidence": 0.41,
+        "priority_score": 81,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 81,
+      "false_positive_risk": "Low"
+    }
+  ]
+}

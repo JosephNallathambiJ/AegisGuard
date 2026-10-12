@@ -64,3 +64,9 @@
 [2026-10-12T05:34:09.046156+00:00] [FINDING] Target: http://127.0.0.1:8766/ | [Medium] Cookie Without HttpOnly Attribute: 'session' | CWE: CWE-1004
 [2026-10-12T05:34:09.046261+00:00] [FINDING] Target: http://127.0.0.1:8766/ | [Low] Cookie Missing SameSite Attribute: 'session' | CWE: CWE-1275
 [2026-10-12T05:34:09.046364+00:00] [FINDING] Target: http://127.0.0.1:8766/ | [Low] Server Banner Version Disclosure: 'BaseHTTP/0.6 Python/3.9.6, nginx/1.18.0 (Ubuntu)' | CWE: CWE-200
+[2026-10-12T05:41:11.593668+00:00] [FINDING] Target: https://coe.dsce.ac.in/ | [Medium] Missing Strict-Transport-Security (HSTS) Header | CWE: CWE-319
+[2026-10-12T05:41:11.595049+00:00] [FINDING] Target: https://coe.dsce.ac.in/ | [Medium] Missing Content-Security-Policy (CSP) | CWE: CWE-1021
+[2026-10-12T05:41:11.595203+00:00] [FINDING] Target: https://coe.dsce.ac.in/ | [Low] Missing X-Frame-Options (Clickjacking Protection) | CWE: CWE-1021
+[2026-10-12T05:41:11.595313+00:00] [FINDING] Target: https://coe.dsce.ac.in/ | [Low] Missing or Weak X-Content-Type-Options Header | CWE: CWE-16
+[2026-10-12T05:41:11.595418+00:00] [FINDING] Target: https://coe.dsce.ac.in/ | [Informational] Missing Referrer-Policy Header | CWE: CWE-200
+[2026-10-12T05:41:11.595525+00:00] [FINDING] Target: https://coe.dsce.ac.in/ | [Informational] Server Banner Version Disclosure: 'Apache' | CWE: CWE-200

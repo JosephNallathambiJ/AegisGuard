@@ -1,0 +1,457 @@
+{
+  "scan_id": "bb-agent-20261012054109-f04d22",
+  "target_url": "https://coe.dsce.ac.in",
+  "policy_profile": "Bug Bounty Standard",
+  "timestamp": "2026-10-12T05:41:09.566885+00:00",
+  "duration_seconds": 2.55,
+  "status_code": 200,
+  "blocked_redirects_count": 0,
+  "scheduler_telemetry": {
+    "target_host": "coe.dsce.ac.in",
+    "requests_sent": 5,
+    "requests_remaining": 95,
+    "max_requests_per_host": 100,
+    "configured_rps": 2.0,
+    "current_effective_rate": 2.47,
+    "elapsed_time_seconds": 2.03
+  },
+  "metadata": {
+    "program": "HackerOne / Bugcrowd Authorized Assessment",
+    "hostname": "coe.dsce.ac.in",
+    "scheme": "https",
+    "port": 443,
+    "policy_profile": "Bug Bounty Standard",
+    "allow_local_lab": false,
+    "max_rps": 2.0,
+    "path": "/",
+    "tech_stack": {
+      "web_servers": [
+        "Apache"
+      ],
+      "frameworks": [],
+      "languages": [
+        "PHP"
+      ]
+    }
+  },
+  "severity_summary": {
+    "Critical": 1,
+    "High": 7,
+    "Medium": 0,
+    "Low": 2,
+    "Informational": 0
+  },
+  "total_findings": 10,
+  "ml_enhanced": true,
+  "agent_plan": {
+    "target_url": "https://coe.dsce.ac.in",
+    "policy_profile": "Bug Bounty Standard",
+    "planned_tools": [
+      "core_http_probes",
+      "whatweb",
+      "dns_recon",
+      "nmap_services",
+      "ssl_cipher_audit",
+      "nikto_misconfig"
+    ],
+    "planning_rationale": [
+      "Target scheme: HTTPS (TLS audit required)",
+      "Scope check verified via ScopeManager policies.",
+      "Enforcing non-destructive banner, header, and configuration audits only."
+    ],
+    "timestamp": "2026-10-12T05:41:09.567743+00:00"
+  },
+  "kali_tools_telemetry": {
+    "nmap": {
+      "tool": "nmap",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [
+        {
+          "title": "Exposed Web Port: 80/tcp",
+          "severity": "Informational",
+          "cwe": "CWE-200",
+          "cvss": 2.0,
+          "confidence": 0.9,
+          "verification_status": "observed",
+          "endpoint": "coe.dsce.ac.in:80",
+          "parameter": "tcp/80",
+          "evidence": "Socket connection succeeded on port 80.",
+          "remediation": "Ensure port is intentionally exposed and protected with rate limiting.",
+          "tool_source": "nmap-python-fallback"
+        },
+        {
+          "title": "Exposed Web Port: 443/tcp",
+          "severity": "Informational",
+          "cwe": "CWE-200",
+          "cvss": 2.0,
+          "confidence": 0.9,
+          "verification_status": "observed",
+          "endpoint": "coe.dsce.ac.in:443",
+          "parameter": "tcp/443",
+          "evidence": "Socket connection succeeded on port 443.",
+          "remediation": "Ensure port is intentionally exposed and protected with rate limiting.",
+          "tool_source": "nmap-python-fallback"
+        },
+        {
+          "title": "Exposed Web Port: 8080/tcp",
+          "severity": "Informational",
+          "cwe": "CWE-200",
+          "cvss": 2.0,
+          "confidence": 0.9,
+          "verification_status": "observed",
+          "endpoint": "coe.dsce.ac.in:8080",
+          "parameter": "tcp/8080",
+          "evidence": "Socket connection succeeded on port 8080.",
+          "remediation": "Ensure port is intentionally exposed and protected with rate limiting.",
+          "tool_source": "nmap-python-fallback"
+        }
+      ],
+      "raw_output": "Python TCP socket connection probe completed for coe.dsce.ac.in."
+    },
+    "whatweb": {
+      "tool": "whatweb",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [
+        {
+          "title": "Web Server / Technology Banner Exposed",
+          "severity": "Low",
+          "cwe": "CWE-200",
+          "cvss": 3.1,
+          "confidence": 0.95,
+          "verification_status": "observed",
+          "endpoint": "https://coe.dsce.ac.in",
+          "parameter": "Response Headers",
+          "evidence": "Server: Apache",
+          "remediation": "Configure reverse proxies or web servers to strip diagnostic technology banners.",
+          "tool_source": "whatweb-python-fallback"
+        }
+      ],
+      "raw_output": "Python HTTP response header technology audit completed."
+    },
+    "sslscan": {
+      "tool": "sslscan",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [],
+      "raw_output": "Python SSL socket handshake inspection completed."
+    },
+    "nikto": {
+      "tool": "nikto",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [],
+      "raw_output": "Python defensive misconfiguration probe completed."
+    },
+    "dnsrecon": {
+      "tool": "dnsrecon",
+      "mode": "kali_native",
+      "status": "completed",
+      "findings": [],
+      "raw_output": "coe.dsce.ac.in.\t\t60\tIN\tHINFO\t\"rfc8482\" \"\"\n"
+    }
+  },
+  "llm_analysis": {
+    "executive_summary": "Authorized assessment for https://coe.dsce.ac.in identified 10 security observations (1 Critical, 7 High, 0 Medium, 2 Low). Overall security posture indicates a elevated risk posture requiring standard hardening.",
+    "risk_prioritization": "Elevated Priority - Address high-impact cryptographic and session configurations first.",
+    "remediation_roadmap": [
+      "2. Implement defense-in-depth HTTP headers (Strict-Transport-Security, CSP, X-Content-Type-Options: nosniff).",
+      "5. Remove server banners and runtime versions in proxy configuration to minimize footprint."
+    ],
+    "bug_bounty_draft": "**Title:** Missing X-Frame-Options (Clickjacking Protection)\n**Severity:** Critical\n**Vulnerability Type:** CWE-1021\n**Target Asset:** https://coe.dsce.ac.in/\n\n**Description:**\nThe X-Frame-Options header indicates whether a browser should be allowed to render a page in a <frame>, <iframe>, or <embed>.\n\n**Evidence:**\n```\nHeader 'X-Frame-Options' not defined in HTTP response.\n```\n\n**Remediation:**\nSet: X-Frame-Options: DENY (or SAMEORIGIN).",
+    "llm_engine_used": "Deterministic Defensive Intelligence Engine (Qwen3 offline fallback)"
+  },
+  "findings": [
+    {
+      "id": "HDR-003",
+      "title": "Missing X-Frame-Options (Clickjacking Protection)",
+      "severity": "Critical",
+      "confidence": 0.51,
+      "category": "Security Headers",
+      "endpoint": "https://coe.dsce.ac.in/",
+      "parameter": null,
+      "evidence": "Header 'X-Frame-Options' not defined in HTTP response.",
+      "description": "The X-Frame-Options header indicates whether a browser should be allowed to render a page in a <frame>, <iframe>, or <embed>.",
+      "impact": "Adversaries could frame the endpoint on a malicious site and perform UI redress / clickjacking attacks.",
+      "remediation": "Set: X-Frame-Options: DENY (or SAMEORIGIN).",
+      "cwe": "CWE-1021",
+      "cvss": 4.3,
+      "references": [
+        "https://owasp.org/www-community/attacks/Clickjacking"
+      ],
+      "verification_status": "confirmed",
+      "scope_status": "in_scope",
+      "manual_verification_required": false,
+      "manual_verification_notes": {},
+      "is_duplicate": false,
+      "duplicate_signature": "89ffca6d006ebcd96b459f1cbc9f8bce",
+      "ml_assessment": {
+        "ml_adjusted_severity": "Critical",
+        "ml_confidence": 0.51,
+        "priority_score": 83,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 83,
+      "false_positive_risk": "Low"
+    },
+    {
+      "id": "HDR-004",
+      "title": "Missing or Weak X-Content-Type-Options Header",
+      "severity": "High",
+      "confidence": 0.54,
+      "category": "Security Headers",
+      "endpoint": "https://coe.dsce.ac.in/",
+      "parameter": null,
+      "evidence": "X-Content-Type-Options: Header Absent",
+      "description": "Lacks 'nosniff' directive, allowing browsers to MIME-sniff response bodies and execute malicious payloads masquerading as static files.",
+      "impact": "Increases risk of drive-by download attacks and XSS via uploaded files served with generic MIME types.",
+      "remediation": "Set: X-Content-Type-Options: nosniff on all responses.",
+      "cwe": "CWE-16",
+      "cvss": 3.7,
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options"
+      ],
+      "verification_status": "confirmed",
+      "scope_status": "in_scope",
+      "manual_verification_required": false,
+      "manual_verification_notes": {},
+      "is_duplicate": false,
+      "duplicate_signature": "59415c05f5fb62783ed335f5fac27671",
+      "ml_assessment": {
+        "ml_adjusted_severity": "High",
+        "ml_confidence": 0.54,
+        "priority_score": 67,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 67,
+      "false_positive_risk": "Low"
+    },
+    {
+      "title": "Web Server / Technology Banner Exposed",
+      "severity": "High",
+      "cwe": "CWE-200",
+      "cvss": 3.1,
+      "confidence": 0.59,
+      "verification_status": "observed",
+      "endpoint": "https://coe.dsce.ac.in",
+      "parameter": "Response Headers",
+      "evidence": "Server: Apache",
+      "remediation": "Configure reverse proxies or web servers to strip diagnostic technology banners.",
+      "tool_source": "whatweb-python-fallback",
+      "is_duplicate": false,
+      "duplicate_signature": "84aa0d6453e95c7bec0f430a38041ff9",
+      "ml_assessment": {
+        "ml_adjusted_severity": "High",
+        "ml_confidence": 0.59,
+        "priority_score": 66,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 66,
+      "false_positive_risk": "Low"
+    },
+    {
+      "id": "DISC-001",
+      "title": "Server Banner Version Disclosure: 'Apache'",
+      "severity": "High",
+      "confidence": 0.83,
+      "category": "Information Disclosure",
+      "endpoint": "https://coe.dsce.ac.in/",
+      "parameter": null,
+      "evidence": "Server: Apache",
+      "description": "The Server response header discloses specific web server software and version numbers, aiding threat reconnaissance.",
+      "impact": "Adversaries can tailor specific CVE search queries against the revealed server release.",
+      "remediation": "Suppress or genericize the Server header in web server configuration (e.g. ServerTokens Prod).",
+      "cwe": "CWE-200",
+      "cvss": 2.0,
+      "references": [],
+      "verification_status": "confirmed",
+      "scope_status": "in_scope",
+      "manual_verification_required": false,
+      "manual_verification_notes": {},
+      "is_duplicate": false,
+      "duplicate_signature": "e252711f3ed5769cc15b99d43576e1ee",
+      "ml_assessment": {
+        "ml_adjusted_severity": "High",
+        "ml_confidence": 0.83,
+        "priority_score": 65,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 65,
+      "false_positive_risk": "Low"
+    },
+    {
+      "id": "HDR-005",
+      "title": "Missing Referrer-Policy Header",
+      "severity": "High",
+      "confidence": 0.67,
+      "category": "Security Headers",
+      "endpoint": "https://coe.dsce.ac.in/",
+      "parameter": null,
+      "evidence": "Header 'Referrer-Policy' not defined.",
+      "description": "Controls how much referrer information is sent along with requests, preventing URI token and query parameter leakage.",
+      "impact": "Sensitive query string parameters (session tokens, email addresses) may leak to external domains in the HTTP Referer header.",
+      "remediation": "Set: Referrer-Policy: strict-origin-when-cross-origin",
+      "cwe": "CWE-200",
+      "cvss": 2.0,
+      "references": [],
+      "verification_status": "potential",
+      "scope_status": "in_scope",
+      "manual_verification_required": false,
+      "manual_verification_notes": {},
+      "is_duplicate": false,
+      "duplicate_signature": "4e5fd8612a738061a5c35803b00ed92c",
+      "ml_assessment": {
+        "ml_adjusted_severity": "High",
+        "ml_confidence": 0.67,
+        "priority_score": 64,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 64,
+      "false_positive_risk": "Low"
+    },
+    {
+      "title": "Exposed Web Port: 80/tcp",
+      "severity": "High",
+      "cwe": "CWE-200",
+      "cvss": 2.0,
+      "confidence": 0.67,
+      "verification_status": "observed",
+      "endpoint": "coe.dsce.ac.in:80",
+      "parameter": "tcp/80",
+      "evidence": "Socket connection succeeded on port 80.",
+      "remediation": "Ensure port is intentionally exposed and protected with rate limiting.",
+      "tool_source": "nmap-python-fallback",
+      "is_duplicate": false,
+      "duplicate_signature": "761dfd55a6719e77f160eed35132c761",
+      "ml_assessment": {
+        "ml_adjusted_severity": "High",
+        "ml_confidence": 0.67,
+        "priority_score": 64,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 64,
+      "false_positive_risk": "Low"
+    },
+    {
+      "title": "Exposed Web Port: 443/tcp",
+      "severity": "High",
+      "cwe": "CWE-200",
+      "cvss": 2.0,
+      "confidence": 0.67,
+      "verification_status": "observed",
+      "endpoint": "coe.dsce.ac.in:443",
+      "parameter": "tcp/443",
+      "evidence": "Socket connection succeeded on port 443.",
+      "remediation": "Ensure port is intentionally exposed and protected with rate limiting.",
+      "tool_source": "nmap-python-fallback",
+      "is_duplicate": false,
+      "duplicate_signature": "e610ddf2f587992a4439a5bca86ce273",
+      "ml_assessment": {
+        "ml_adjusted_severity": "High",
+        "ml_confidence": 0.67,
+        "priority_score": 64,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 64,
+      "false_positive_risk": "Low"
+    },
+    {
+      "title": "Exposed Web Port: 8080/tcp",
+      "severity": "High",
+      "cwe": "CWE-200",
+      "cvss": 2.0,
+      "confidence": 0.67,
+      "verification_status": "observed",
+      "endpoint": "coe.dsce.ac.in:8080",
+      "parameter": "tcp/8080",
+      "evidence": "Socket connection succeeded on port 8080.",
+      "remediation": "Ensure port is intentionally exposed and protected with rate limiting.",
+      "tool_source": "nmap-python-fallback",
+      "is_duplicate": false,
+      "duplicate_signature": "049ab2b391a12be6fd093e1a705bc7be",
+      "ml_assessment": {
+        "ml_adjusted_severity": "High",
+        "ml_confidence": 0.67,
+        "priority_score": 64,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 64,
+      "false_positive_risk": "Low"
+    },
+    {
+      "id": "HDR-002",
+      "title": "Missing Content-Security-Policy (CSP)",
+      "severity": "Low",
+      "confidence": 0.41,
+      "category": "Security Headers",
+      "endpoint": "https://coe.dsce.ac.in/",
+      "parameter": null,
+      "evidence": "Header 'Content-Security-Policy' was absent in the HTTP response.",
+      "description": "Content Security Policy helps detect and mitigate Cross-Site Scripting (XSS), data injection, and unauthorized frame embedding.",
+      "impact": "Increases vulnerability to stored/reflected XSS and unauthorized malicious script execution.",
+      "remediation": "Define a restrictive Content-Security-Policy, e.g.: default-src 'self'; script-src 'self'; object-src 'none';",
+      "cwe": "CWE-1021",
+      "cvss": 6.1,
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP"
+      ],
+      "verification_status": "confirmed",
+      "scope_status": "in_scope",
+      "manual_verification_required": false,
+      "manual_verification_notes": {},
+      "is_duplicate": false,
+      "duplicate_signature": "7f08a580c3a3af414e89fc2ecec21d06",
+      "ml_assessment": {
+        "ml_adjusted_severity": "Low",
+        "ml_confidence": 0.41,
+        "priority_score": 31,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 31,
+      "false_positive_risk": "Low"
+    },
+    {
+      "id": "HDR-001",
+      "title": "Missing Strict-Transport-Security (HSTS) Header",
+      "severity": "Low",
+      "confidence": 0.37,
+      "category": "Security Headers",
+      "endpoint": "https://coe.dsce.ac.in/",
+      "parameter": null,
+      "evidence": "HTTP Response Headers:\nDate: Mon, 12 Oct 2026 05:32:31 GMT\nServer: Apache\nContent-Type: text/html; charset=UTF-8",
+      "description": "Strict-Transport-Security (HSTS) enforces HTTPS connections for modern browsers, protecting users against SSL-stripping and man-in-the-middle attacks.",
+      "impact": "Users visiting the site over insecure public Wi-Fi can have their initial plaintext HTTP request intercepted before redirection.",
+      "remediation": "Add header: Strict-Transport-Security: max-age=31536000; includeSubDomains; preload",
+      "cwe": "CWE-319",
+      "cvss": 5.4,
+      "references": [
+        "https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html"
+      ],
+      "verification_status": "confirmed",
+      "scope_status": "in_scope",
+      "manual_verification_required": false,
+      "manual_verification_notes": {},
+      "is_duplicate": false,
+      "duplicate_signature": "d724dcb6be62163972f813d829b83eca",
+      "ml_assessment": {
+        "ml_adjusted_severity": "Low",
+        "ml_confidence": 0.37,
+        "priority_score": 29,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 29,
+      "false_positive_risk": "Low"
+    }
+  ]
+}

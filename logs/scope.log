@@ -54,3 +54,16 @@
 [2026-10-12T05:34:07.242716+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
 [2026-10-12T05:34:07.530331+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
 [2026-10-12T05:34:09.142984+00:00] [SCOPE_CHECK] [BLOCKED] Target: evil-out-of-scope.com | Reason: Hostname 'evil-out-of-scope.com' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1', 'coe.dsce.ac.in', '192.168.100.232']
+[2026-10-12T05:39:21.567982+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:39:21.568274+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:39:21.569335+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:39:21.569629+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:39:21.570293+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:41:09.567495+00:00] [SCOPE_CHECK] [PERMITTED] Target: coe.dsce.ac.in | Reason: Matches authorized scope pattern 'coe.dsce.ac.in'.
+[2026-10-12T05:41:09.567784+00:00] [SCOPE_CHECK] [PERMITTED] Target: coe.dsce.ac.in | Reason: Matches authorized scope pattern 'coe.dsce.ac.in'.
+[2026-10-12T05:41:11.092345+00:00] [SCOPE_CHECK] [PERMITTED] Target: coe.dsce.ac.in | Reason: Matches authorized scope pattern 'coe.dsce.ac.in'.
+[2026-10-12T05:41:11.597053+00:00] [SCOPE_CHECK] [PERMITTED] Target: coe.dsce.ac.in | Reason: Matches authorized scope pattern 'coe.dsce.ac.in'.
+[2026-10-12T05:41:11.602567+00:00] [SCOPE_CHECK] [PERMITTED] Target: coe.dsce.ac.in | Reason: Matches authorized scope pattern 'coe.dsce.ac.in'.
+[2026-10-12T05:41:11.643422+00:00] [SCOPE_CHECK] [PERMITTED] Target: coe.dsce.ac.in | Reason: Matches authorized scope pattern 'coe.dsce.ac.in'.
+[2026-10-12T05:41:11.659436+00:00] [SCOPE_CHECK] [PERMITTED] Target: coe.dsce.ac.in | Reason: Matches authorized scope pattern 'coe.dsce.ac.in'.
+[2026-10-12T05:42:43.113044+00:00] [SCOPE_CHECK] [PERMITTED] Target: coe.dsce.ac.in | Reason: Matches authorized scope pattern 'coe.dsce.ac.in'.

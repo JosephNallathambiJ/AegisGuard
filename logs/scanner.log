@@ -33,3 +33,7 @@
 [2026-10-12T05:34:09.046475+00:00] [SCAN_COMPLETE] Target: http://127.0.0.1:8766/ | Findings: 8 | Requests: 4 | Blocked Redirects: 0
 [2026-10-12T05:34:09.133512+00:00] [BURPSUITE] Imported 1 findings from Burp Suite audit data.
 [2026-10-12T05:34:09.143098+00:00] [METASPLOIT] LAUNCH BLOCKED: Target 'http://evil-out-of-scope.com' is OUT OF SCOPE.
+[2026-10-12T05:39:21.568344+00:00] [SCAN_START] Target: http://127.0.0.1:8000/ | Policy: Local Lab | Rate: 2.0 req/s
+[2026-10-12T05:39:21.569258+00:00] [CONNECT_ERROR] Target: http://127.0.0.1:8000/ | Error: HTTPConnectionPool(host='127.0.0.1', port=8000): Max retries exceeded with url: / (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=8000): Failed to establish a new connection: [Errno 61] Connection refused"))
+[2026-10-12T05:41:09.567892+00:00] [SCAN_START] Target: https://coe.dsce.ac.in/ | Policy: Bug Bounty Standard | Rate: 2.0 req/s
+[2026-10-12T05:41:11.595630+00:00] [SCAN_COMPLETE] Target: https://coe.dsce.ac.in/ | Findings: 6 | Requests: 5 | Blocked Redirects: 0
