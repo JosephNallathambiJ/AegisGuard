@@ -1,0 +1,35 @@
+# AegisGuard Scanner Operational Log
+[2026-10-07T08:59:11.467824+00:00] [SCAN_START] Target: https://coe.dsce.ac.in/ | Policy: Bug Bounty Standard | Rate: 2.0 req/s
+[2026-10-07T08:59:13.493579+00:00] [SCAN_COMPLETE] Target: https://coe.dsce.ac.in/ | Findings: 6 | Requests: 5 | Blocked Redirects: 0
+[2026-10-07T09:04:21.134224+00:00] [SCAN_START] Target: http://192.168.100.232/ | Policy: Bug Bounty Standard | Rate: 2.0 req/s
+[2026-10-07T09:04:21.151250+00:00] [CONNECT_ERROR] Target: http://192.168.100.232/ | Error: HTTPConnectionPool(host='192.168.100.232', port=80): Max retries exceeded with url: / (Caused by NewConnectionError("HTTPConnection(host='192.168.100.232', port=80): Failed to establish a new connection: [Errno 65] No route to host"))
+[2026-10-07T09:17:24.738214+00:00] [SCAN_START] Target: http://testphp.vulnweb.com/ | Policy: Bug Bounty Standard | Rate: 2.0 req/s
+[2026-10-07T09:17:32.795311+00:00] [CONNECT_ERROR] Target: http://testphp.vulnweb.com/ | Error: HTTPConnectionPool(host='testphp.vulnweb.com', port=80): Read timed out. (read timeout=8.0)
+[2026-10-07T09:23:58.171619+00:00] [SCAN_START] Target: http://127.0.0.1:8080/ | Policy: Local Lab | Rate: 2.0 req/s
+[2026-10-07T09:23:58.172355+00:00] [CONNECT_ERROR] Target: http://127.0.0.1:8080/ | Error: HTTPConnectionPool(host='127.0.0.1', port=8080): Max retries exceeded with url: / (Caused by NewConnectionError("HTTPConnection(host='127.0.0.1', port=8080): Failed to establish a new connection: [Errno 61] Connection refused"))
+[2026-10-07T09:24:09.110211+00:00] [SCAN_START] Target: http://testphp.vulnweb.com/ | Policy: Bug Bounty Standard | Rate: 2.0 req/s
+[2026-10-07T09:24:17.115940+00:00] [CONNECT_ERROR] Target: http://testphp.vulnweb.com/ | Error: HTTPConnectionPool(host='testphp.vulnweb.com', port=80): Read timed out. (read timeout=8.0)
+[2026-10-07T09:24:41.032537+00:00] [SCAN_START] Target: http://127.0.0.1:8088/ | Policy: Local Lab | Rate: 2.0 req/s
+[2026-10-07T09:24:42.549698+00:00] [SCAN_COMPLETE] Target: http://127.0.0.1:8088/ | Findings: 5 | Requests: 4 | Blocked Redirects: 0
+[2026-10-07T09:24:42.614547+00:00] [SCAN_START] Target: http://127.0.0.1:8088/ | Policy: Local Lab | Rate: 2.0 req/s
+[2026-10-07T09:24:44.126499+00:00] [SCAN_COMPLETE] Target: http://127.0.0.1:8088/ | Findings: 5 | Requests: 4 | Blocked Redirects: 0
+[2026-10-07T10:10:22.171449+00:00] [PROXY] Proxy configuration updated: http://127.0.0.1:8080 (Enabled: False)
+[2026-10-12T04:48:11.698190+00:00] [PROXY] Proxy configuration updated: http://127.0.0.1:8080 (Enabled: False)
+[2026-10-12T04:48:11.699609+00:00] [METASPLOIT] LAUNCH BLOCKED: Target 'https://unauthorized-evil-target.com' is OUT OF SCOPE.
+[2026-10-12T05:00:11.338123+00:00] [SCAN_START] Target: http://127.0.0.1:8999/ | Policy: Local Lab | Rate: 2.0 req/s
+[2026-10-12T05:32:19.526031+00:00] [SCAN_START] Target: http://127.0.0.1:8765/ | Policy: Local Lab | Rate: 2.0 req/s
+[2026-10-12T05:32:21.044127+00:00] [SCAN_COMPLETE] Target: http://127.0.0.1:8765/ | Findings: 11 | Requests: 4 | Blocked Redirects: 0
+[2026-10-12T05:32:44.513081+00:00] [SCAN_START] Target: http://127.0.0.1:8765/ | Policy: Local Lab | Rate: 2.0 req/s
+[2026-10-12T05:32:46.035621+00:00] [SCAN_COMPLETE] Target: http://127.0.0.1:8765/ | Findings: 11 | Requests: 4 | Blocked Redirects: 0
+[2026-10-12T05:32:47.028892+00:00] [PROXY] Proxy configuration updated: http://127.0.0.1:8080 (Enabled: False)
+[2026-10-12T05:32:47.029065+00:00] [METASPLOIT] LAUNCH BLOCKED: Target 'http://unauthorized-evil.com' is OUT OF SCOPE.
+[2026-10-12T05:33:14.426385+00:00] [SCAN_START] Target: http://127.0.0.1:8765/ | Policy: Local Lab | Rate: 2.0 req/s
+[2026-10-12T05:33:15.946817+00:00] [SCAN_COMPLETE] Target: http://127.0.0.1:8765/ | Findings: 11 | Requests: 4 | Blocked Redirects: 0
+[2026-10-12T05:33:16.742914+00:00] [PROXY] Proxy configuration updated: http://127.0.0.1:8080 (Enabled: False)
+[2026-10-12T05:33:16.743114+00:00] [METASPLOIT] LAUNCH BLOCKED: Target 'http://unauthorized-evil.com' is OUT OF SCOPE.
+[2026-10-12T05:34:05.722243+00:00] [SCAN_START] Target: http://127.0.0.1:8766/ | Policy: Local Lab | Rate: 2.0 req/s
+[2026-10-12T05:34:07.239919+00:00] [SCAN_COMPLETE] Target: http://127.0.0.1:8766/ | Findings: 8 | Requests: 4 | Blocked Redirects: 0
+[2026-10-12T05:34:07.530448+00:00] [SCAN_START] Target: http://127.0.0.1:8766/ | Policy: Local Lab | Rate: 2.0 req/s
+[2026-10-12T05:34:09.046475+00:00] [SCAN_COMPLETE] Target: http://127.0.0.1:8766/ | Findings: 8 | Requests: 4 | Blocked Redirects: 0
+[2026-10-12T05:34:09.133512+00:00] [BURPSUITE] Imported 1 findings from Burp Suite audit data.
+[2026-10-12T05:34:09.143098+00:00] [METASPLOIT] LAUNCH BLOCKED: Target 'http://evil-out-of-scope.com' is OUT OF SCOPE.

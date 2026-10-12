@@ -1,0 +1,26 @@
+{
+  "features": [
+    "missing_hsts",
+    "missing_csp",
+    "missing_xfo",
+    "missing_xcto",
+    "cookie_unsecured",
+    "cookie_no_httponly",
+    "cors_wildcard",
+    "banner_exposed",
+    "weak_tls",
+    "dangerous_methods",
+    "debug_info_exposed",
+    "plain_http_open",
+    "epss_proxy"
+  ],
+  "classes": [
+    "Informational",
+    "Low",
+    "Medium",
+    "High",
+    "Critical"
+  ],
+  "scikit_learn_accuracy": 0.9306,
+  "scikit_learn_f1_weighted": 0.9273
+}

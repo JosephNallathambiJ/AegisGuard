@@ -1,0 +1,19 @@
+finding_title,category,severity,evidence_length,is_public_api,response_status,has_waf,is_false_positive
+Missing Strict-Transport-Security,Security Headers,Medium,0,0,200,0,0
+Missing Content-Security-Policy,Security Headers,Medium,0,0,200,0,0
+Missing Content-Security-Policy,Security Headers,Low,0,1,204,0,1
+Wildcard Access-Control-Allow-Origin,CORS Misconfiguration,Low,1,1,200,0,1
+Wildcard Access-Control-Allow-Origin,CORS Misconfiguration,High,25,0,200,0,0
+Cookie Missing Secure Flag,Cookie Security,Medium,18,0,200,0,0
+Cookie Missing Secure Flag,Cookie Security,Low,14,0,302,0,0
+Server Banner Version Leakage,Information Disclosure,Low,22,0,200,0,0
+Server Banner Version Leakage,Information Disclosure,Informational,8,1,200,1,1
+Insecure HTTP Methods Permitted,HTTP Methods,Medium,15,0,200,0,0
+Insecure HTTP Methods Permitted,HTTP Methods,Low,5,1,405,0,1
+Insecure TLS Version Supported,TLS/SSL Analysis,High,10,0,200,0,0
+Verbose Stack Trace or Debug Mode Active,Error Handling,High,350,0,500,0,0
+Verbose Stack Trace or Debug Mode Active,Error Handling,Low,25,0,404,0,1
+Missing X-Frame-Options,Security Headers,Low,0,0,200,0,0
+Missing X-Frame-Options,Security Headers,Informational,0,1,200,1,1
+Missing X-Content-Type-Options,Security Headers,Low,0,0,200,0,0
+Certificate Near Expiration,TLS/SSL Analysis,Medium,12,0,200,0,0

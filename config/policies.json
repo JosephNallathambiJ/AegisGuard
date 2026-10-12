@@ -1,0 +1,74 @@
+{
+  "profiles": {
+    "Safe Passive": {
+      "description": "Zero active probes. Purely passive metadata, TLS/SSL handshake, security headers, cookie attributes, server banners, and public robots.txt inspection.",
+      "allow_active_probes": false,
+      "allow_options_probe": false,
+      "allow_redirect_probe": false,
+      "allow_cors_probe": false,
+      "allow_local_lab": false,
+      "checks": [
+        "tls_inspection",
+        "security_headers",
+        "cookie_attributes",
+        "server_banners",
+        "tech_fingerprint",
+        "passive_error_leakage"
+      ]
+    },
+    "Bug Bounty Standard": {
+      "description": "Standard non-destructive assessment. Passive checks plus carefully controlled, rate-limited validation checks (OPTIONS methods, CORS reflection, HTTPS redirection). No state changes, no credential attacks, no DoS.",
+      "allow_active_probes": true,
+      "allow_options_probe": true,
+      "allow_redirect_probe": true,
+      "allow_cors_probe": true,
+      "allow_local_lab": false,
+      "checks": [
+        "tls_inspection",
+        "security_headers",
+        "cookie_attributes",
+        "cors_configuration",
+        "http_methods_options",
+        "redirect_behavior",
+        "server_banners",
+        "tech_fingerprint",
+        "passive_error_leakage"
+      ]
+    },
+    "Strict Program Compliance": {
+      "description": "Restricted mode honoring narrow program mandates. Only non-destructive header and TLS validation. Ignores active method probes and requires explicit check approval.",
+      "allow_active_probes": false,
+      "allow_options_probe": false,
+      "allow_redirect_probe": true,
+      "allow_cors_probe": false,
+      "allow_local_lab": false,
+      "checks": [
+        "tls_inspection",
+        "security_headers",
+        "cookie_attributes",
+        "redirect_behavior",
+        "tech_fingerprint"
+      ]
+    },
+    "Local Lab": {
+      "description": "Permits localhost, 127.0.0.1, and private lab subnets for testing locally hosted vulnerable apps (DVWA, Juice Shop). Runs all non-destructive modules with rate controls.",
+      "allow_active_probes": true,
+      "allow_options_probe": true,
+      "allow_redirect_probe": true,
+      "allow_cors_probe": true,
+      "allow_local_lab": true,
+      "checks": [
+        "tls_inspection",
+        "security_headers",
+        "cookie_attributes",
+        "cors_configuration",
+        "http_methods_options",
+        "redirect_behavior",
+        "server_banners",
+        "tech_fingerprint",
+        "passive_error_leakage"
+      ]
+    }
+  },
+  "default_profile": "Bug Bounty Standard"
+}

@@ -1,0 +1,19 @@
+vuln_id,category,name,default_severity,cvss_base,cwe_id,description
+VULN-001,Security Headers,Missing Strict-Transport-Security,Medium,5.4,CWE-319,The website does not enforce HTTPS connections via HSTS header.
+VULN-002,Security Headers,Missing Content-Security-Policy,Medium,6.1,CWE-1021,No CSP defined leaving the application vulnerable to cross-site scripting and unauthorized resource loading.
+VULN-003,Security Headers,Missing X-Frame-Options,Low,4.3,CWE-1021,The page lacks clickjacking defense headers allowing framing by external origins.
+VULN-004,Security Headers,Missing X-Content-Type-Options,Low,3.7,CWE-16,MIME-type sniffing is not explicitly disabled by nosniff header.
+VULN-005,Security Headers,Missing Referrer-Policy,Informational,2.0,CWE-200,Referrer headers may leak internal path parameters to external domains.
+VULN-006,Cookie Security,Cookie Missing Secure Flag,Medium,5.3,CWE-614,Session or state cookies transmitted over unencrypted channels if visited over HTTP.
+VULN-007,Cookie Security,Cookie Missing HttpOnly Flag,Medium,5.0,CWE-1004,Client-side JavaScript can read sensitive cookie values.
+VULN-008,Cookie Security,Cookie Missing SameSite Attribute,Low,4.2,CWE-1275,Lack of SameSite attribute facilitates Cross-Site Request Forgery (CSRF).
+VULN-009,CORS Misconfiguration,Wildcard Origin with Credentials,High,7.5,CWE-942,Overly permissive CORS configuration allows third parties unauthorized data extraction.
+VULN-010,CORS Misconfiguration,Permissive Wildcard Access-Control,Low,3.5,CWE-942,Access-Control-Allow-Origin header is set to wildcard asterisk on private resource.
+VULN-011,Information Disclosure,Server Banner Version Leakage,Low,4.0,CWE-200,Server header exposes detailed web server and operating system version string.
+VULN-012,Information Disclosure,Technology Framework Banner Disclosed,Low,3.8,CWE-200,X-Powered-By or framework header discloses backend programming stack.
+VULN-013,Information Disclosure,Sensitive Metadata or Dotfile Exposed,Medium,6.5,CWE-538,Passive inspection indicates public availability of sensitive paths like robots.txt disallow trails or dotfiles.
+VULN-014,TLS/SSL Analysis,Insecure TLS Version Supported,High,7.4,CWE-326,Web server negotiates legacy protocols such as TLS 1.0 or TLS 1.1.
+VULN-015,TLS/SSL Analysis,Certificate Near Expiration or Untrusted,Medium,5.9,CWE-295,X.509 certificate validation warning or imminent validity expiration.
+VULN-016,HTTP Methods,Insecure HTTP Methods Permitted,Medium,5.0,CWE-749,Dangerous HTTP methods such as TRACE, TRACK, or arbitrary PUT are allowed on endpoint.
+VULN-017,Redirect Analysis,Insecure Plaintext HTTP Redirection Absent,Medium,4.8,CWE-311,Plaintext HTTP request does not automatically redirect to secure HTTPS endpoint.
+VULN-018,Error Handling,Verbose Stack Trace or Debug Mode Active,High,7.0,CWE-209,Application returns detailed exception traces or database diagnostic messages.

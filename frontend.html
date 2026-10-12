@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AegisGuard | Bug Bounty Security Assessment Platform</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-group">
+        <div class="shield-badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="logo-title">AegisGuard <span class="badge-tag">BUG-BOUNTY</span></h1>
+          <p class="logo-subtitle">Scope-Enforced, Rate-Limited Web Security Assessment Platform</p>
+        </div>
+      </div>
+      <div class="header-status">
+        <span class="status-indicator live"></span>
+        <span id="engineStatusLabel" class="engine-status">Scope Guard Active</span>
+        <button id="viewLogsBtn" class="btn-text-action" style="margin-left: 10px;">Audit Logs</button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- 1. Bug Bounty Program & Scope Configuration Card -->
+      <section class="scope-panel card">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <h2 class="panel-title">Bug Bounty Program Scope & Policy</h2>
+            <p class="panel-desc">Assessments are strictly constrained to authorized in-scope assets and rate ceilings.</p>
+          </div>
+          <div class="scope-actions">
+            <button id="toggleEditScopeBtn" class="btn btn-secondary btn-sm">Edit Program Scope</button>
+          </div>
+        </div>
+
+        <div class="scope-display-grid">
+          <div class="scope-item">
+            <span class="scope-label">PROGRAM NAME</span>
+            <div id="progNameDisp" class="scope-val highlight">HackerOne / Bugcrowd Authorized Assessment</div>
+          </div>
+          <div class="scope-item">
+            <span class="scope-label">POLICY PROFILE</span>
+            <select id="policyProfileSelect" class="select-filter full-w">
+              <option value="Bug Bounty Standard">Bug Bounty Standard</option>
+              <option value="Safe Passive">Safe Passive (Zero Active Probes)</option>
+              <option value="Strict Program Compliance">Strict Program Compliance</option>
+              <option value="Local Lab">Local Lab (Permit Localhost)</option>
+            </select>
+          </div>
+          <div class="scope-item">
+            <span class="scope-label">RATE LIMIT CEILING</span>
+            <div class="rate-disp">
+              <span id="rateLimitDisp" class="rate-val">2.0</span>
+              <span class="rate-unit">requests / second</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="scope-targets-row">
+          <div class="targets-block">
+            <span class="scope-sublabel">AUTHORIZED TARGETS:</span>
+            <div id="inScopePills" class="pills-container">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+          <div class="targets-block">
+            <span class="scope-sublabel">EXCLUDED TARGETS:</span>
+            <div id="excludedPills" class="pills-container">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Scope Edit Drawer (Collapsible) -->
+        <div id="scopeEditDrawer" class="scope-drawer hidden">
+          <div class="drawer-header">Edit Program Configuration</div>
+          <div class="drawer-inputs">
+            <label>Program Name: <input type="text" id="editProgName" class="target-input input-sm"></label>
+            <label>Authorized Targets (comma-separated): <input type="text" id="editTargets" class="target-input input-sm" placeholder="*.example.com, api.example.com"></label>
+            <label>Excluded Targets (comma-separated): <input type="text" id="editExcluded" class="target-input input-sm" placeholder="admin.example.com, internal.example.com"></label>
+            <div class="drawer-actions">
+              <button id="saveScopeBtn" class="btn btn-primary btn-sm">Save Scope Rules</button>
+              <button id="cancelScopeBtn" class="btn btn-secondary btn-sm">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Target Assessment Launch Panel -->
+      <section class="scan-panel card">
+        <form id="scanForm" class="scan-form">
+          <div class="input-row">
+            <div class="url-input-container">
+              <span class="input-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+              </span>
+              <input 
+                type="text" 
+                id="targetUrl" 
+                class="target-input" 
+                placeholder="Enter authorized target (e.g., https://api.example.com or http://localhost:8080)" 
+                required 
+                autocomplete="off"
+              />
+            </div>
+            <button type="submit" id="scanBtn" class="btn btn-primary" disabled>
+              <span class="btn-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+              </span>
+              <span class="btn-text">Start Security Assessment</span>
+            </button>
+          </div>
+
+          <!-- Dynamic Pre-Flight Scope & Parameter Status -->
+          <div class="scope-status-strip" id="scopeStatusStrip">
+            <div class="strip-pill" id="scopeCheckPill">SCOPE: CHECKING</div>
+            <div class="strip-pill" id="policyPill">POLICY: BUG BOUNTY STANDARD</div>
+            <div class="strip-pill" id="ratePill">RATE: 2 req/s</div>
+            <div class="strip-pill target-pill" id="targetPill">TARGET: None</div>
+          </div>
+
+          <!-- Authorization Confirmation Box -->
+          <div class="auth-gate-box">
+            <div class="auth-gate-title">AUTHORIZATION CHECK</div>
+            <p class="auth-gate-desc">
+              I confirm that this target is explicitly authorized under the configured bug-bounty program
+              and is currently within the program's published scope.
+            </p>
+            <div class="options-row">
+              <label class="auth-checkbox-label">
+                <input type="checkbox" id="authCheckbox" required>
+                <span class="custom-check"></span>
+                <span class="auth-text">
+                  <strong>[✓] I understand and accept the program rules.</strong>
+                </span>
+              </label>
+
+              <div class="toggles-group">
+                <label class="toggle-pill" title="Runs tools.py Kali tool suite & autonomous agent planning">
+                  <input type="checkbox" id="agentToggle" checked>
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">Kali Agent Mode (tools.py)</span>
+                </label>
+
+                <label class="toggle-pill">
+                  <input type="checkbox" id="mlToggle" checked>
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">ML Prioritization & Deduplication</span>
+                </label>
+
+                <label class="toggle-pill">
+                  <input type="checkbox" id="llmToggle" checked>
+                  <span class="toggle-slider"></span>
+                  <span class="toggle-label">Qwen3 Analysis Assistant</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- Live Scan Progress Bar & Terminal Logs -->
+        <div id="scanProgressArea" class="scan-progress-area hidden">
+          <div class="progress-header">
+            <span class="progress-status-text" id="progressStatus">Initializing scope-enforced assessment...</span>
+            <span class="progress-percentage" id="progressPercent">0%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progressBar"></div>
+          </div>
+          <div class="mini-terminal" id="miniTerminal">
+            <div class="term-line info">[+] Initializing DNS resolution & SSRF guardrails...</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2b. Manual Security Tools Console (Metasploit & Burp Suite) -->
+      <section class="manual-tools-panel card">
+        <div class="panel-header">
+          <div class="header-title-group">
+            <span class="panel-badge">RESEARCHER TOOLKIT</span>
+            <h3 class="panel-title">Interactive Security Testing Console (Kali Linux)</h3>
+          </div>
+          <span class="safe-badge-pill">MANUAL TOOLS • STRICT SCOPE ENFORCED</span>
+        </div>
+        <p class="panel-desc">
+          Integrations for locally installed security utilities. Metasploit and Burp Suite run independently
+          from the automated scanner and never execute automated attacks or exploit chains.
+        </p>
+
+        <div class="manual-tools-grid">
+          <!-- Metasploit Console Card -->
+          <div class="tool-action-card">
+            <div class="tool-header-row">
+              <div class="tool-title-wrap">
+                <span class="tool-icon">⚡</span>
+                <div>
+                  <h4 class="tool-name">Metasploit Framework</h4>
+                  <span class="tool-sub">msfconsole (Manual Interactive Console)</span>
+                </div>
+              </div>
+              <span id="msfStatusBadge" class="strip-pill warn">Checking...</span>
+            </div>
+            <p class="tool-note">
+              Opens an interactive terminal console session pre-configured with the in-scope target variable.
+              Exploits are never automatically selected or executed.
+            </p>
+            <div class="tool-btn-row">
+              <button type="button" id="openMsfBtn" class="btn btn-secondary btn-sm">
+                Open Metasploit Console
+              </button>
+              <span id="msfFeedback" class="tool-feedback-txt"></span>
+            </div>
+          </div>
+
+          <!-- Burp Suite Card -->
+          <div class="tool-action-card">
+            <div class="tool-header-row">
+              <div class="tool-title-wrap">
+                <span class="tool-icon">🎯</span>
+                <div>
+                  <h4 class="tool-name">Burp Suite</h4>
+                  <span class="tool-sub">burpsuite (Interception Proxy & Testing)</span>
+                </div>
+              </div>
+              <span id="burpStatusBadge" class="strip-pill warn">Checking...</span>
+            </div>
+            <p class="tool-note">
+              Launch Burp Suite locally, export scope matching program policies, or route scanner probes through <code>127.0.0.1:8080</code>.
+            </p>
+            <div class="tool-btn-row">
+              <button type="button" id="launchBurpBtn" class="btn btn-secondary btn-sm">
+                Launch Burp Suite
+              </button>
+              <button type="button" id="exportBurpScopeBtn" class="btn btn-outline btn-sm">
+                Export Burp Scope JSON
+              </button>
+              <button type="button" id="toggleProxyBtn" class="btn btn-outline btn-sm">
+                Route via Proxy (127.0.0.1:8080)
+              </button>
+              <span id="burpFeedback" class="tool-feedback-txt"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Results Section -->
+      <section id="resultsSection" class="results-section hidden">
+        <!-- Overview Banner -->
+        <div class="overview-grid">
+          <div class="target-meta-card card">
+            <div class="meta-label">ASSESSED TARGET ASSET</div>
+            <div class="meta-target-url" id="resTargetUrl">https://api.example.com</div>
+            <div class="meta-badges" id="metaBadges">
+              <span class="meta-badge" id="resStatusBadge">Status: 200 OK</span>
+              <span class="meta-badge" id="resDurationBadge">Duration: 1.2s</span>
+              <span class="meta-badge" id="resRequestsBadge">Requests Sent: 8</span>
+              <span class="meta-badge" id="resRedirectsBadge">Blocked Redirects: 0</span>
+              <span class="meta-badge" id="resTechBadge">Stack: Nginx</span>
+            </div>
+          </div>
+
+          <!-- Professional Multi-Format Report Downloaders -->
+          <div class="export-actions">
+            <div class="download-dropdown-group">
+              <button class="btn btn-primary" id="mainDownloadBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Download Report ▼
+              </button>
+              <div class="download-menu" id="downloadMenu">
+                <a href="#" class="download-item" id="dlMarkdown">
+                  <span class="dl-fmt">Markdown (.md)</span>
+                  <span class="dl-sub">Formatted for HackerOne / Bugcrowd</span>
+                </a>
+                <a href="#" class="download-item" id="dlHtml">
+                  <span class="dl-fmt">Standalone HTML (.html)</span>
+                  <span class="dl-sub">Clean executive presentation report</span>
+                </a>
+                <a href="#" class="download-item" id="dlJson">
+                  <span class="dl-fmt">Structured JSON (.json)</span>
+                  <span class="dl-sub">Full programmatic audit dataset</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Severity Metric Counters -->
+        <div class="metrics-grid">
+          <div class="metric-card critical">
+            <div class="metric-header">
+              <span class="metric-title">Critical</span>
+              <span class="sev-dot critical-dot"></span>
+            </div>
+            <div class="metric-value" id="countCritical">0</div>
+            <div class="metric-desc">Immediate action</div>
+          </div>
+
+          <div class="metric-card high">
+            <div class="metric-header">
+              <span class="metric-title">High</span>
+              <span class="sev-dot high-dot"></span>
+            </div>
+            <div class="metric-value" id="countHigh">0</div>
+            <div class="metric-desc">High exploitation risk</div>
+          </div>
+
+          <div class="metric-card medium">
+            <div class="metric-header">
+              <span class="metric-title">Medium</span>
+              <span class="sev-dot medium-dot"></span>
+            </div>
+            <div class="metric-value" id="countMedium">0</div>
+            <div class="metric-desc">Configuration weakness</div>
+          </div>
+
+          <div class="metric-card low">
+            <div class="metric-header">
+              <span class="metric-title">Low</span>
+              <span class="sev-dot low-dot"></span>
+            </div>
+            <div class="metric-value" id="countLow">0</div>
+            <div class="metric-desc">Defense-in-depth gap</div>
+          </div>
+
+          <div class="metric-card info">
+            <div class="metric-header">
+              <span class="metric-title">Informational</span>
+              <span class="sev-dot info-dot"></span>
+            </div>
+            <div class="metric-value" id="countInfo">0</div>
+            <div class="metric-desc">Passive observation</div>
+          </div>
+        </div>
+
+        <!-- Executive & LLM Summary -->
+        <div class="analysis-box card">
+          <div class="box-header">
+            <div class="box-title-group">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+              <h3 class="box-title">AI Remediation Analysis & Bug Bounty Draft</h3>
+            </div>
+            <span class="llm-tag" id="llmEngineTag">Qwen3 Analysis Active</span>
+          </div>
+          <div class="box-body">
+            <p id="execSummaryText" class="exec-summary"></p>
+            <div class="roadmap-block">
+              <h4 class="subhead">Remediation Roadmap</h4>
+              <ul id="roadmapList" class="roadmap-list"></ul>
+            </div>
+            <div id="bbDraftContainer" class="draft-block hidden">
+              <h4 class="subhead">Bug Bounty Submission Draft</h4>
+              <pre class="draft-box" id="bbDraftText"></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter & Finding Table -->
+        <div class="findings-container card">
+          <div class="table-toolbar">
+            <h3 class="toolbar-title">Assessment Findings (<span id="totalFindingsCount">0</span>)</h3>
+            <div class="filters-row">
+              <select id="severityFilter" class="select-filter">
+                <option value="ALL">All Severities</option>
+                <option value="Critical">Critical</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+                <option value="Informational">Informational</option>
+              </select>
+              <select id="categoryFilter" class="select-filter">
+                <option value="ALL">All Categories</option>
+                <option value="Security Headers">Security Headers</option>
+                <option value="TLS/SSL Analysis">TLS/SSL Analysis</option>
+                <option value="Cookie Security">Cookie Security</option>
+                <option value="CORS Misconfiguration">CORS Misconfiguration</option>
+                <option value="HTTP Methods">HTTP Methods</option>
+                <option value="Redirect Analysis">Redirect Analysis</option>
+                <option value="Information Disclosure">Information Disclosure</option>
+                <option value="Error Handling">Error Handling</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="findings-list" id="findingsList">
+            <!-- Dynamic Finding Items rendered here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Scan History Panel -->
+      <section class="history-section card">
+        <div class="panel-header">
+          <h3 class="panel-title">Audit History</h3>
+          <button id="refreshHistoryBtn" class="btn-text-action">Refresh</button>
+        </div>
+        <div id="historyList" class="history-list">
+          <div class="empty-state">No previous audits found. Launch a scan above.</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Audit Logs Modal -->
+    <div id="logsModal" class="modal-backdrop hidden">
+      <div class="modal-box card">
+        <div class="panel-header">
+          <h3 class="panel-title">AegisGuard Audit & Scope Logs</h3>
+          <button id="closeLogsBtn" class="btn-text-action">Close</button>
+        </div>
+        <div class="log-tabs">
+          <button class="log-tab active" data-log="scanner">Scanner Log</button>
+          <button class="log-tab" data-log="scope">Scope Log</button>
+          <button class="log-tab" data-log="findings">Findings Log</button>
+        </div>
+        <pre id="modalLogContent" class="modal-log-pre"></pre>
+      </div>
+    </div>
+
+    <footer class="app-footer">
+      <p>AegisGuard &bull; Authorized Bug Bounty Reconnaissance & Security Audit Engine &bull; Non-Destructive</p>
+    </footer>
+  </div>
+
+  <script>
+    let currentReport = null;
+    let allFindings = [];
+    let currentScope = {};
+
+    // Elements
+    const scanForm = document.getElementById("scanForm");
+    const targetUrlInput = document.getElementById("targetUrl");
+    const authCheckbox = document.getElementById("authCheckbox");
+    const policyProfileSelect = document.getElementById("policyProfileSelect");
+    const mlToggle = document.getElementById("mlToggle");
+    const llmToggle = document.getElementById("llmToggle");
+    const scanBtn = document.getElementById("scanBtn");
+    const scopeCheckPill = document.getElementById("scopeCheckPill");
+    const policyPill = document.getElementById("policyPill");
+    const ratePill = document.getElementById("ratePill");
+    const targetPill = document.getElementById("targetPill");
+    const inScopePills = document.getElementById("inScopePills");
+    const excludedPills = document.getElementById("excludedPills");
+    const progNameDisp = document.getElementById("progNameDisp");
+    const rateLimitDisp = document.getElementById("rateLimitDisp");
+
+    const scanProgressArea = document.getElementById("scanProgressArea");
+    const progressBar = document.getElementById("progressBar");
+    const progressStatus = document.getElementById("progressStatus");
+    const progressPercent = document.getElementById("progressPercent");
+    const miniTerminal = document.getElementById("miniTerminal");
+    const resultsSection = document.getElementById("resultsSection");
+    const findingsList = document.getElementById("findingsList");
+    const severityFilter = document.getElementById("severityFilter");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const historyList = document.getElementById("historyList");
+    const refreshHistoryBtn = document.getElementById("refreshHistoryBtn");
+
+    // Download menu elements
+    const mainDownloadBtn = document.getElementById("mainDownloadBtn");
+    const downloadMenu = document.getElementById("downloadMenu");
+    const dlMarkdown = document.getElementById("dlMarkdown");
+    const dlHtml = document.getElementById("dlHtml");
+    const dlJson = document.getElementById("dlJson");
+
+    // Scope Edit elements
+    const toggleEditScopeBtn = document.getElementById("toggleEditScopeBtn");
+    const scopeEditDrawer = document.getElementById("scopeEditDrawer");
+    const saveScopeBtn = document.getElementById("saveScopeBtn");
+    const cancelScopeBtn = document.getElementById("cancelScopeBtn");
+    const editProgName = document.getElementById("editProgName");
+    const editTargets = document.getElementById("editTargets");
+    const editExcluded = document.getElementById("editExcluded");
+
+    // Logs modal
+    const viewLogsBtn = document.getElementById("viewLogsBtn");
+    const logsModal = document.getElementById("logsModal");
+    const closeLogsBtn = document.getElementById("closeLogsBtn");
+    const modalLogContent = document.getElementById("modalLogContent");
+
+    window.addEventListener("DOMContentLoaded", () => {
+      fetchScopeConfig();
+      fetchSystemStatus();
+      fetchToolCapabilities();
+      loadHistory();
+    });
+
+    async function fetchToolCapabilities() {
+      try {
+        const res = await fetch("/api/agent/tools");
+        if (res.ok) {
+          const data = await res.json();
+          const tools = data.tools || {};
+          
+          // Metasploit status
+          const msf = tools["metasploit"] || {};
+          const msfBadge = document.getElementById("msfStatusBadge");
+          if (msfBadge) {
+            if (msf.available) {
+              msfBadge.textContent = "AVAILABLE (LOCAL)";
+              msfBadge.className = "strip-pill success";
+            } else {
+              msfBadge.textContent = "NOT INSTALLED";
+              msfBadge.className = "strip-pill warn";
+            }
+          }
+
+          // Burp Suite status
+          const burp = tools["Burp Suite"] || {};
+          const burpBadge = document.getElementById("burpStatusBadge");
+          if (burpBadge) {
+            if (burp.available) {
+              burpBadge.textContent = "AVAILABLE (LOCAL)";
+              burpBadge.className = "strip-pill success";
+            } else {
+              burpBadge.textContent = "NOT INSTALLED";
+              burpBadge.className = "strip-pill warn";
+            }
+          }
+        }
+      } catch (e) {
+        console.error("Tool capability fetch error", e);
+      }
+    }
+
+    async function fetchScopeConfig() {
+      try {
+        const res = await fetch("/api/scope");
+        if (res.ok) {
+          currentScope = await res.json();
+          renderScopeDisplay();
+        }
+      } catch (e) {
+        console.error("Scope fetch error", e);
+      }
+    }
+
+    function renderScopeDisplay() {
+      progNameDisp.textContent = currentScope.program || "Authorized Program";
+      rateLimitDisp.textContent = currentScope.max_requests_per_second || "2.0";
+      ratePill.textContent = `RATE: ${currentScope.max_requests_per_second || 2.0} req/s`;
+
+      const targets = currentScope.targets || [];
+      inScopePills.innerHTML = targets.map(t => `<span class="pill-scope in">${escapeHtml(t)}</span>`).join("");
+
+      const excluded = currentScope.excluded_targets || [];
+      excludedPills.innerHTML = excluded.map(e => `<span class="pill-scope out">${escapeHtml(e)}</span>`).join("");
+
+      validateTargetInScopeUI();
+    }
+
+    async function fetchSystemStatus() {
+      try {
+        const res = await fetch("/api/status");
+        if (res.ok) {
+          const data = await res.json();
+          document.getElementById("engineStatusLabel").textContent = data.ml_models_loaded 
+            ? "Engine Ready (ML Active)" 
+            : "Engine Ready (Heuristic Fallback)";
+        }
+      } catch (e) {}
+    }
+
+    // Dynamic scope matching as user types
+    targetUrlInput.addEventListener("input", validateTargetInScopeUI);
+    authCheckbox.addEventListener("change", validateTargetInScopeUI);
+    policyProfileSelect.addEventListener("change", () => {
+      policyPill.textContent = `POLICY: ${policyProfileSelect.value.toUpperCase()}`;
+      validateTargetInScopeUI();
+    });
+
+    function validateTargetInScopeUI() {
+      const raw = targetUrlInput.value.trim();
+      const isAuthChecked = authCheckbox.checked;
+
+      if (!raw) {
+        scopeCheckPill.textContent = "SCOPE: PENDING INPUT";
+        scopeCheckPill.className = "strip-pill";
+        targetPill.textContent = "TARGET: None";
+        scanBtn.disabled = true;
+        return;
+      }
+
+      let host = "";
+      try {
+        const u = raw.startsWith("http") ? new URL(raw) : new URL("https://" + raw);
+        host = u.hostname.toLowerCase();
+      } catch (e) {
+        host = raw.toLowerCase().split("/")[0].split(":")[0];
+      }
+
+      targetPill.textContent = `TARGET: ${host}`;
+
+      // Check exclusions first
+      const excluded = currentScope.excluded_targets || [];
+      const isExcluded = excluded.some(exc => matchesPattern(host, exc));
+
+      if (isExcluded) {
+        scopeCheckPill.textContent = "SCOPE: EXCLUDED HOST (PROHIBITED)";
+        scopeCheckPill.className = "strip-pill error";
+        scanBtn.disabled = true;
+        return;
+      }
+
+      // Check targets
+      const targets = currentScope.targets || [];
+      const isInScope = targets.some(tgt => matchesPattern(host, tgt));
+
+      // Local lab exception
+      const isLocal = (host === "localhost" || host === "127.0.0.1") && policyProfileSelect.value === "Local Lab";
+
+      if (isInScope || isLocal) {
+        scopeCheckPill.textContent = "SCOPE: IN SCOPE";
+        scopeCheckPill.className = "strip-pill success";
+        scanBtn.disabled = !isAuthChecked;
+      } else {
+        scopeCheckPill.textContent = "SCOPE: OUT OF SCOPE";
+        scopeCheckPill.className = "strip-pill warn";
+        scanBtn.disabled = true;
+      }
+    }
+
+    function matchesPattern(host, pat) {
+      host = host.toLowerCase().trim();
+      pat = pat.toLowerCase().trim();
+      if (host === pat) return true;
+      if (pat.startsWith("*.")) {
+        const base = pat.slice(2);
+        return host === base || host.endsWith("." + base);
+      }
+      return false;
+    }
+
+    // Scope Drawer toggle
+    toggleEditScopeBtn.addEventListener("click", () => {
+      scopeEditDrawer.classList.toggle("hidden");
+      if (!scopeEditDrawer.classList.contains("hidden")) {
+        editProgName.value = currentScope.program || "";
+        editTargets.value = (currentScope.targets || []).join(", ");
+        editExcluded.value = (currentScope.excluded_targets || []).join(", ");
+      }
+    });
+
+    cancelScopeBtn.addEventListener("click", () => {
+      scopeEditDrawer.classList.add("hidden");
+    });
+
+    saveScopeBtn.addEventListener("click", async () => {
+      const prog = editProgName.value.trim();
+      const tgts = editTargets.value.split(",").map(s => s.trim()).filter(Boolean);
+      const excs = editExcluded.value.split(",").map(s => s.trim()).filter(Boolean);
+
+      try {
+        const res = await fetch("/api/scope", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            program: prog,
+            authorized: true,
+            targets: tgts,
+            excluded_targets: excs,
+            allowed_schemes: ["https", "http"],
+            max_requests_per_second: currentScope.max_requests_per_second || 2.0,
+            automated_scanning_allowed: true,
+            program_rules_acknowledged: true
+          })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          currentScope = data.scope;
+          renderScopeDisplay();
+          scopeEditDrawer.classList.add("hidden");
+          alert("Program scope successfully updated!");
+        }
+      } catch (e) {
+        alert("Failed to save scope: " + e.message);
+      }
+    });
+
+    // Handle Form Submit
+    scanForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const url = targetUrlInput.value.trim();
+      const profile = policyProfileSelect.value;
+
+      scanBtn.disabled = true;
+      scanProgressArea.classList.remove("hidden");
+      resultsSection.classList.add("hidden");
+      miniTerminal.innerHTML = "";
+      progressBar.style.width = "10%";
+      progressPercent.textContent = "10%";
+      progressStatus.textContent = "Verifying program scope & scheduler tokens...";
+      addTerminalLog("Checking target against in-scope wildcards...", "info");
+
+      const steps = [
+        { pct: "30%", txt: "Validating DNS & intercepting out-of-scope redirects...", log: "Rate limiter acquired slot. Checking X.509 validity and ciphers..." },
+        { pct: "50%", txt: "Auditing security headers & cookie flags...", log: "Analyzing HSTS, CSP, and Set-Cookie directives against CWE-16..." },
+        { pct: "70%", txt: "Performing non-destructive policy checks...", log: "Testing OPTIONS verbs and CORS reflection rules..." },
+        { pct: "85%", txt: "Applying ML prioritization & deduplication...", log: "Sorting findings by priority score and computing false-positive filters..." }
+      ];
+
+      let stepIndex = 0;
+      const progressTimer = setInterval(() => {
+        if (stepIndex < steps.length) {
+          const s = steps[stepIndex];
+          progressBar.style.width = s.pct;
+          progressPercent.textContent = s.pct;
+          progressStatus.textContent = s.txt;
+          addTerminalLog(s.log, "info");
+          stepIndex++;
+        }
+      }, 700);
+
+      try {
+        const agentToggle = document.getElementById("agentToggle");
+        const endpoint = (agentToggle && agentToggle.checked) ? "/api/agent/scan" : "/api/scan";
+
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            url: url,
+            program_rules_acknowledged: authCheckbox.checked,
+            policy_profile: profile,
+            enable_ml: mlToggle.checked,
+            enable_llm: llmToggle.checked
+          })
+        });
+
+        clearInterval(progressTimer);
+
+        if (!response.ok) {
+          const err = await response.json();
+          throw new Error(err.detail || "Scan request failed");
+        }
+
+        const reportData = await response.json();
+
+        progressBar.style.width = "100%";
+        progressPercent.textContent = "100%";
+        progressStatus.textContent = "Audit Complete!";
+        addTerminalLog("Audit complete! Report sanitized and saved.", "success");
+
+        setTimeout(() => {
+          scanProgressArea.classList.add("hidden");
+          scanBtn.disabled = false;
+          displayResults(reportData);
+          loadHistory();
+        }, 800);
+
+      } catch (err) {
+        clearInterval(progressTimer);
+        progressBar.style.width = "100%";
+        progressBar.style.backgroundColor = "var(--color-critical)";
+        progressStatus.textContent = "Assessment Terminated";
+        addTerminalLog(`Error: ${err.message}`, "error");
+        scanBtn.disabled = false;
+        alert("Scan Error: " + err.message);
+      }
+    });
+
+    function addTerminalLog(msg, type = "info") {
+      const line = document.createElement("div");
+      line.className = `term-line ${type}`;
+      line.textContent = `[+] ${msg}`;
+      miniTerminal.appendChild(line);
+      miniTerminal.scrollTop = miniTerminal.scrollHeight;
+    }
+
+    // =========================================================================
+    // Manual Security Tool Handlers (Metasploit & Burp Suite)
+    // =========================================================================
+    const openMsfBtn = document.getElementById("openMsfBtn");
+    const msfFeedback = document.getElementById("msfFeedback");
+    if (openMsfBtn) {
+      openMsfBtn.addEventListener("click", async () => {
+        msfFeedback.textContent = "Launching console...";
+        try {
+          const targetUrl = targetUrlInput.value.trim() || null;
+          const res = await fetch("/api/tools/metasploit/launch", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url: targetUrl })
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            msfFeedback.textContent = "✓ " + (data.message || "Console launched!");
+          } else {
+            msfFeedback.textContent = "⚠️ " + (data.detail || data.error || "Launch failed");
+          }
+        } catch (e) {
+          msfFeedback.textContent = "⚠️ " + e.message;
+        }
+      });
+    }
+
+    const launchBurpBtn = document.getElementById("launchBurpBtn");
+    const burpFeedback = document.getElementById("burpFeedback");
+    if (launchBurpBtn) {
+      launchBurpBtn.addEventListener("click", async () => {
+        burpFeedback.textContent = "Launching Burp Suite...";
+        try {
+          const res = await fetch("/api/tools/burp/launch", { method: "POST" });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            burpFeedback.textContent = "✓ " + (data.message || "Burp launched!");
+          } else {
+            burpFeedback.textContent = "⚠️ " + (data.detail || data.error || "Launch failed");
+          }
+        } catch (e) {
+          burpFeedback.textContent = "⚠️ " + e.message;
+        }
+      });
+    }
+
+    const exportBurpScopeBtn = document.getElementById("exportBurpScopeBtn");
+    if (exportBurpScopeBtn) {
+      exportBurpScopeBtn.addEventListener("click", async () => {
+        try {
+          const res = await fetch("/api/tools/burp/scope");
+          if (res.ok) {
+            const data = await res.json();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "burp_target_scope.json";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            burpFeedback.textContent = "✓ Scope JSON exported!";
+          }
+        } catch (e) {
+          burpFeedback.textContent = "⚠️ " + e.message;
+        }
+      });
+    }
+
+    const toggleProxyBtn = document.getElementById("toggleProxyBtn");
+    let proxyActive = false;
+    if (toggleProxyBtn) {
+      toggleProxyBtn.addEventListener("click", async () => {
+        proxyActive = !proxyActive;
+        try {
+          const res = await fetch("/api/tools/proxy/configure", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ host: "127.0.0.1", port: 8080, enabled: proxyActive })
+          });
+          if (res.ok) {
+            toggleProxyBtn.textContent = proxyActive ? "Proxy Active (127.0.0.1:8080) ✓" : "Route via Proxy (127.0.0.1:8080)";
+            toggleProxyBtn.className = proxyActive ? "btn btn-primary btn-sm" : "btn btn-outline btn-sm";
+            burpFeedback.textContent = proxyActive ? "✓ Scanner proxy set to 127.0.0.1:8080" : "Proxy routing disabled";
+          }
+        } catch (e) {
+          burpFeedback.textContent = "⚠️ " + e.message;
+        }
+      });
+    }
+
+    // Render Results
+    function displayResults(report) {
+      currentReport = report;
+      allFindings = report.findings || [];
+
+      document.getElementById("resTargetUrl").textContent = report.target_url;
+      document.getElementById("resStatusBadge").textContent = `HTTP Status: ${report.status_code}`;
+      document.getElementById("resDurationBadge").textContent = `Duration: ${report.duration_seconds}s`;
+
+      const sched = report.scheduler_telemetry || {};
+      document.getElementById("resRequestsBadge").textContent = `Requests Sent: ${sched.requests_sent || 1}`;
+      document.getElementById("resRedirectsBadge").textContent = `Blocked Redirects: ${report.blocked_redirects_count || 0}`;
+
+      const tech = report.metadata?.tech_stack;
+      let techSummary = "Standard Web Stack";
+      if (tech) {
+        const combined = [...(tech.web_servers || []), ...(tech.frameworks || [])];
+        if (combined.length > 0) techSummary = combined.join(", ");
+      }
+      document.getElementById("resTechBadge").textContent = `Stack: ${techSummary}`;
+
+      const counts = report.severity_summary || {};
+      document.getElementById("countCritical").textContent = counts["Critical"] || 0;
+      document.getElementById("countHigh").textContent = counts["High"] || 0;
+      document.getElementById("countMedium").textContent = counts["Medium"] || 0;
+      document.getElementById("countLow").textContent = counts["Low"] || 0;
+      document.getElementById("countInfo").textContent = counts["Informational"] || 0;
+      document.getElementById("totalFindingsCount").textContent = allFindings.length;
+
+      const llm = report.llm_analysis;
+      if (llm) {
+        document.getElementById("execSummaryText").textContent = llm.executive_summary || "Assessment complete.";
+        document.getElementById("llmEngineTag").textContent = llm.llm_engine_used || "Qwen3 Engine";
+        const rmList = document.getElementById("roadmapList");
+        rmList.innerHTML = (llm.remediation_roadmap || []).map(r => `<li>${escapeHtml(r)}</li>`).join("");
+
+        if (llm.bug_bounty_draft) {
+          document.getElementById("bbDraftContainer").classList.remove("hidden");
+          document.getElementById("bbDraftText").textContent = llm.bug_bounty_draft;
+        } else {
+          document.getElementById("bbDraftContainer").classList.add("hidden");
+        }
+      }
+
+      filterAndRenderFindings();
+      resultsSection.classList.remove("hidden");
+      resultsSection.scrollIntoView({ behavior: "smooth" });
+    }
+
+    function filterAndRenderFindings() {
+      const selectedSev = severityFilter.value;
+      const selectedCat = categoryFilter.value;
+
+      const filtered = allFindings.filter(f => {
+        const matchesSev = (selectedSev === "ALL") || (f.severity === selectedSev);
+        const matchesCat = (selectedCat === "ALL") || (f.category === selectedCat);
+        return matchesSev && matchesCat;
+      });
+
+      if (filtered.length === 0) {
+        findingsList.innerHTML = `<div class="empty-state">No findings matching the selected filters.</div>`;
+        return;
+      }
+
+      findingsList.innerHTML = filtered.map((f, idx) => {
+        const sevClass = f.severity.toLowerCase();
+        const confPercent = Math.round((f.confidence || 0.9) * 100);
+        const isFp = f.verification_status === "false_positive";
+        const isDup = f.is_duplicate;
+        const priority = f.priority_score || 50;
+
+        return `
+          <div class="finding-card ${sevClass}" id="finding-${idx}">
+            <div class="finding-summary" onclick="toggleDetails(${idx})">
+              <div class="finding-left">
+                <span class="severity-badge ${sevClass}">${f.severity}</span>
+                <div class="finding-titles">
+                  <div class="finding-title">
+                    ${escapeHtml(f.title)}
+                    ${isDup ? `<span class="dup-pill">Duplicate</span>` : ''}
+                  </div>
+                  <div class="finding-cat-row">
+                    <span class="finding-category">${escapeHtml(f.category)}</span>
+                    <span class="cwe-pill">${escapeHtml(f.cwe || 'CWE-16')}</span>
+                    <span class="cvss-pill">CVSS ${f.cvss || 'N/A'}</span>
+                    <span class="status-pill status-${f.verification_status}">${f.verification_status.toUpperCase()}</span>
+                    <span class="scope-pill">IN SCOPE</span>
+                    ${isFp ? `<span class="fp-pill">Likely False Positive</span>` : ''}
+                  </div>
+                </div>
+              </div>
+              <div class="finding-right">
+                <div class="priority-meter">
+                  <span class="priority-val">Score: ${priority}/100</span>
+                  <div class="priority-bar"><div class="priority-fill" style="width: ${priority}%"></div></div>
+                </div>
+                <div class="confidence-gauge">
+                  <span class="conf-label">Confidence: ${confPercent}%</span>
+                  <div class="conf-bar"><div class="conf-fill" style="width: ${confPercent}%"></div></div>
+                </div>
+                <span class="expand-icon" id="icon-${idx}">▼</span>
+              </div>
+            </div>
+
+            <!-- Expandable Finding Details -->
+            <div class="finding-details hidden" id="details-${idx}">
+              <div class="detail-section">
+                <div class="detail-label">AFFECTED ASSET & ENDPOINT</div>
+                <code class="code-asset">${escapeHtml(f.endpoint || 'Target Root')}</code>
+              </div>
+
+              <div class="detail-section">
+                <div class="detail-label">TECHNICAL DESCRIPTION</div>
+                <p class="detail-text">${escapeHtml(f.description)}</p>
+              </div>
+
+              <div class="detail-section">
+                <div class="detail-label">OBSERVED EVIDENCE (AUTOMATICALLY REDACTED)</div>
+                <pre class="code-snippet">${escapeHtml(f.evidence)}</pre>
+              </div>
+
+              <div class="detail-section">
+                <div class="detail-label">SECURITY IMPACT</div>
+                <p class="detail-text">${escapeHtml(f.impact || 'Degraded defense-in-depth posture.')}</p>
+              </div>
+
+              ${f.manual_verification_required ? `
+                <div class="manual-verification-box">
+                  <div class="manual-box-header">⚠️ MANUAL VERIFICATION REQUIRED</div>
+                  <div class="manual-box-body">
+                    <p><strong>Why this matters:</strong> ${escapeHtml(f.manual_verification_notes?.why_it_matters || 'Requires human context.')}</p>
+                    <p><strong>Verification Step:</strong> ${escapeHtml(f.manual_verification_notes?.how_to_verify || 'Inspect manually.')}</p>
+                    <p><strong>Program Rule Check:</strong> ${escapeHtml(f.manual_verification_notes?.rule_check || 'Never perform destructive attacks.')}</p>
+                  </div>
+                </div>
+              ` : ''}
+
+              <div class="detail-section">
+                <div class="detail-label">REMEDIATION RECOMMENDATION</div>
+                <div class="remediation-box">${escapeHtml(f.remediation || f.recommendation)}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function toggleDetails(idx) {
+      const details = document.getElementById(`details-${idx}`);
+      const icon = document.getElementById(`icon-${idx}`);
+      if (details.classList.contains("hidden")) {
+        details.classList.remove("hidden");
+        icon.textContent = "▲";
+      } else {
+        details.classList.add("hidden");
+        icon.textContent = "▼";
+      }
+    }
+
+    // Filter listeners
+    severityFilter.addEventListener("change", filterAndRenderFindings);
+    categoryFilter.addEventListener("change", filterAndRenderFindings);
+    refreshHistoryBtn.addEventListener("click", loadHistory);
+
+    // Multi-Format Downloader Dropdown Toggle
+    mainDownloadBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      downloadMenu.classList.toggle("show");
+    });
+
+    document.addEventListener("click", () => {
+      downloadMenu.classList.remove("show");
+    });
+
+    dlMarkdown.addEventListener("click", (e) => {
+      e.preventDefault();
+      downloadReport("markdown");
+    });
+
+    dlHtml.addEventListener("click", (e) => {
+      e.preventDefault();
+      downloadReport("html");
+    });
+
+    dlJson.addEventListener("click", (e) => {
+      e.preventDefault();
+      downloadReport("json");
+    });
+
+    function downloadReport(format) {
+      if (!currentReport) return;
+      window.location.href = `/api/reports/${currentReport.scan_id}/download?format=${format}`;
+    }
+
+    // Historical scans
+    async function loadHistory() {
+      try {
+        const res = await fetch("/api/history");
+        if (res.ok) {
+          const data = await res.json();
+          renderHistory(data.scans || []);
+        }
+      } catch (e) {}
+    }
+
+    function renderHistory(scans) {
+      if (!scans || scans.length === 0) {
+        historyList.innerHTML = `<div class="empty-state">No previous audits found. Launch a scan above.</div>`;
+        return;
+      }
+      historyList.innerHTML = scans.map(s => `
+        <div class="history-item" onclick="loadPreviousScan('${s.scan_id}')">
+          <div class="hist-target">${escapeHtml(s.target_url)} <span class="hist-policy">[${s.policy_profile || 'Standard'}]</span></div>
+          <div class="hist-meta">
+            <span>Findings: ${s.total_findings}</span>
+            <span>${new Date(s.timestamp).toLocaleString()}</span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function loadPreviousScan(scanId) {
+      try {
+        const res = await fetch(`/api/reports/${scanId}`);
+        if (res.ok) {
+          const data = await res.json();
+          displayResults(data);
+          resultsSection.scrollIntoView({ behavior: "smooth" });
+        }
+      } catch (e) {
+        alert("Failed to load historical scan: " + e.message);
+      }
+    }
+
+    // Audit logs modal
+    viewLogsBtn.addEventListener("click", async () => {
+      logsModal.classList.remove("hidden");
+      loadLogTab("scanner");
+    });
+
+    closeLogsBtn.addEventListener("click", () => {
+      logsModal.classList.add("hidden");
+    });
+
+    document.querySelectorAll(".log-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".log-tab").forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        loadLogTab(tab.dataset.log);
+      });
+    });
+
+    async function loadLogTab(logType) {
+      modalLogContent.textContent = "Loading logs...";
+      try {
+        const res = await fetch(`/api/logs/${logType}`);
+        if (res.ok) {
+          const data = await res.json();
+          modalLogContent.textContent = (data.lines || []).join("\n") || "No log entries found.";
+        }
+      } catch (e) {
+        modalLogContent.textContent = "Failed to load log entries.";
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>

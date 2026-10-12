@@ -1,0 +1,56 @@
+# AegisGuard Scope & Policy Verification Audit Trail
+[2026-10-07T08:43:06.289691+00:00] [SCOPE_CHECK] [PERMITTED] Target: api.example.com | Reason: Matches authorized scope pattern '*.example.com'.
+[2026-10-07T08:43:06.290209+00:00] [SCOPE_CHECK] [PERMITTED] Target: admin.example.com | Reason: Matches authorized scope pattern '*.example.com'.
+[2026-10-07T08:43:06.290470+00:00] [SCOPE_CHECK] [BLOCKED] Target: attacker.com | Reason: Hostname 'attacker.com' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1']
+[2026-10-07T08:43:30.026128+00:00] [SCOPE_CHECK] [PERMITTED] Target: api.example.com | Reason: Matches authorized scope pattern '*.example.com'.
+[2026-10-07T08:43:30.026386+00:00] [EXCLUSION_CHECK] [BLOCKED] Target: admin.example.com | Reason: Target 'admin.example.com' matches excluded target 'admin.example.com' in program scope rules.
+[2026-10-07T08:43:30.026708+00:00] [SCOPE_CHECK] [BLOCKED] Target: attacker.com | Reason: Hostname 'attacker.com' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1']
+[2026-10-07T08:43:30.026789+00:00] [SCOPE_CHECK] [PERMITTED] Target: api.example.com | Reason: Matches authorized scope pattern '*.example.com'.
+[2026-10-07T08:43:30.026835+00:00] [EXCLUSION_CHECK] [BLOCKED] Target: admin.example.com | Reason: Target 'admin.example.com' matches excluded target 'admin.example.com' in program scope rules.
+[2026-10-07T08:43:30.026884+00:00] [SCOPE_CHECK] [BLOCKED] Target: attacker.com | Reason: Hostname 'attacker.com' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1']
+[2026-10-07T08:58:53.847638+00:00] [SCOPE_UPDATED] [PERMITTED] Target: Config | Reason: Program: HackerOne / Bugcrowd Authorized Assessment
+[2026-10-07T08:59:11.467291+00:00] [SCOPE_CHECK] [PERMITTED] Target: coe.dsce.ac.in | Reason: Matches authorized scope pattern 'coe.dsce.ac.in'.
+[2026-10-07T08:59:12.991106+00:00] [SCOPE_CHECK] [PERMITTED] Target: coe.dsce.ac.in | Reason: Matches authorized scope pattern 'coe.dsce.ac.in'.
+[2026-10-07T09:03:51.688159+00:00] [SCOPE_UPDATED] [PERMITTED] Target: Config | Reason: Program: HackerOne / Bugcrowd Authorized Assessment
+[2026-10-07T09:04:21.132495+00:00] [SCOPE_CHECK] [PERMITTED] Target: 192.168.100.232 | Reason: Matches authorized scope pattern '192.168.100.232'.
+[2026-10-07T09:17:24.737982+00:00] [SCOPE_CHECK] [PERMITTED] Target: testphp.vulnweb.com | Reason: Matches authorized scope pattern 'testphp.vulnweb.com'.
+[2026-10-07T09:17:24.738143+00:00] [SCOPE_CHECK] [PERMITTED] Target: testphp.vulnweb.com | Reason: Matches authorized scope pattern 'testphp.vulnweb.com'.
+[2026-10-07T09:17:32.795710+00:00] [SCOPE_CHECK] [PERMITTED] Target: testphp.vulnweb.com | Reason: Matches authorized scope pattern 'testphp.vulnweb.com'.
+[2026-10-07T09:17:38.803457+00:00] [SCOPE_CHECK] [PERMITTED] Target: testphp.vulnweb.com | Reason: Matches authorized scope pattern 'testphp.vulnweb.com'.
+[2026-10-07T09:17:43.809645+00:00] [SCOPE_CHECK] [PERMITTED] Target: testphp.vulnweb.com | Reason: Matches authorized scope pattern 'testphp.vulnweb.com'.
+[2026-10-07T09:23:58.171295+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-07T09:24:09.110095+00:00] [SCOPE_CHECK] [PERMITTED] Target: testphp.vulnweb.com | Reason: Matches authorized scope pattern 'testphp.vulnweb.com'.
+[2026-10-07T09:24:41.032194+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-07T09:24:42.614380+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-07T09:24:42.614489+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-07T09:24:44.126624+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-07T09:24:44.127013+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-07T09:24:44.128627+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T04:48:11.699284+00:00] [SCOPE_CHECK] [BLOCKED] Target: unauthorized-evil-target.com | Reason: Hostname 'unauthorized-evil-target.com' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1', 'coe.dsce.ac.in', '192.168.100.232']
+[2026-10-12T04:48:11.699691+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T04:57:39.331652+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T04:57:39.331985+00:00] [SCOPE_CHECK] [PERMITTED] Target: api.example.com | Reason: Matches authorized scope pattern '*.example.com'.
+[2026-10-12T04:57:39.332155+00:00] [SCOPE_CHECK] [BLOCKED] Target: evil-unauthorized.com | Reason: Hostname 'evil-unauthorized.com' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1', 'coe.dsce.ac.in', '192.168.100.232']
+[2026-10-12T05:00:11.337358+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:32:19.107948+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:32:19.108373+00:00] [SCOPE_CHECK] [BLOCKED] Target: unauthorized-evil-target.com | Reason: Hostname 'unauthorized-evil-target.com' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1', 'coe.dsce.ac.in', '192.168.100.232']
+[2026-10-12T05:32:19.108432+00:00] [SCOPE_CHECK] [BLOCKED] Target: 169.254.169.254 | Reason: Hostname '169.254.169.254' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1', 'coe.dsce.ac.in', '192.168.100.232']
+[2026-10-12T05:32:19.525229+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:32:44.093254+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:32:44.093650+00:00] [SCOPE_CHECK] [BLOCKED] Target: unauthorized-evil-target.com | Reason: Hostname 'unauthorized-evil-target.com' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1', 'coe.dsce.ac.in', '192.168.100.232']
+[2026-10-12T05:32:44.093719+00:00] [SCOPE_CHECK] [BLOCKED] Target: 169.254.169.254 | Reason: Hostname '169.254.169.254' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1', 'coe.dsce.ac.in', '192.168.100.232']
+[2026-10-12T05:32:44.512391+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:32:47.029022+00:00] [SCOPE_CHECK] [BLOCKED] Target: unauthorized-evil.com | Reason: Hostname 'unauthorized-evil.com' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1', 'coe.dsce.ac.in', '192.168.100.232']
+[2026-10-12T05:33:14.009243+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:33:14.009602+00:00] [SCOPE_CHECK] [BLOCKED] Target: unauthorized-evil-target.com | Reason: Hostname 'unauthorized-evil-target.com' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1', 'coe.dsce.ac.in', '192.168.100.232']
+[2026-10-12T05:33:14.009672+00:00] [SCOPE_CHECK] [BLOCKED] Target: 169.254.169.254 | Reason: Hostname '169.254.169.254' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1', 'coe.dsce.ac.in', '192.168.100.232']
+[2026-10-12T05:33:14.425665+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:33:16.743043+00:00] [SCOPE_CHECK] [BLOCKED] Target: unauthorized-evil.com | Reason: Hostname 'unauthorized-evil.com' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1', 'coe.dsce.ac.in', '192.168.100.232']
+[2026-10-12T05:33:16.743205+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:34:05.721882+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:34:05.722173+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:34:07.240125+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:34:07.240646+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:34:07.242716+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:34:07.530331+00:00] [SCOPE_CHECK] [PERMITTED] Target: 127.0.0.1 | Reason: Matches authorized scope pattern '127.0.0.1'.
+[2026-10-12T05:34:09.142984+00:00] [SCOPE_CHECK] [BLOCKED] Target: evil-out-of-scope.com | Reason: Hostname 'evil-out-of-scope.com' is outside configured program scope targets: ['*.example.com', 'api.example.com', 'testphp.vulnweb.com', 'localhost', '127.0.0.1', 'coe.dsce.ac.in', '192.168.100.232']

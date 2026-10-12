@@ -1,0 +1,335 @@
+{
+  "scan_id": "bb-agent-20261007092442-1abdbb",
+  "target_url": "http://127.0.0.1:8088",
+  "policy_profile": "Local Lab",
+  "timestamp": "2026-10-07T09:24:42.614305+00:00",
+  "duration_seconds": 1.64,
+  "status_code": 200,
+  "blocked_redirects_count": 0,
+  "scheduler_telemetry": {
+    "target_host": "127.0.0.1",
+    "requests_sent": 4,
+    "requests_remaining": 96,
+    "max_requests_per_host": 100,
+    "configured_rps": 2.0,
+    "current_effective_rate": 2.65,
+    "elapsed_time_seconds": 1.51
+  },
+  "metadata": {
+    "program": "HackerOne / Bugcrowd Authorized Assessment",
+    "hostname": "127.0.0.1",
+    "scheme": "http",
+    "port": 8088,
+    "policy_profile": "Local Lab",
+    "allow_local_lab": true,
+    "max_rps": 2.0,
+    "path": "/",
+    "tech_stack": {
+      "web_servers": [],
+      "frameworks": [],
+      "languages": []
+    }
+  },
+  "severity_summary": {
+    "Critical": 2,
+    "High": 4,
+    "Medium": 0,
+    "Low": 1,
+    "Informational": 0
+  },
+  "total_findings": 7,
+  "ml_enhanced": true,
+  "agent_plan": {
+    "target_url": "http://127.0.0.1:8088",
+    "policy_profile": "Local Lab",
+    "planned_tools": [
+      "core_http_probes",
+      "whatweb",
+      "dns_recon",
+      "nmap_services",
+      "nikto_misconfig"
+    ],
+    "planning_rationale": [
+      "Target scheme: HTTP (Unencrypted transport)",
+      "Scope check verified via ScopeManager policies.",
+      "Enforcing non-destructive banner, header, and configuration audits only."
+    ],
+    "timestamp": "2026-10-07T09:24:42.614460+00:00"
+  },
+  "kali_tools_telemetry": {
+    "nmap": {
+      "tool": "nmap",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [],
+      "raw_output": "Python TCP socket connection probe completed for 127.0.0.1."
+    },
+    "whatweb": {
+      "tool": "whatweb",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [
+        {
+          "title": "Web Server / Technology Banner Exposed",
+          "severity": "Low",
+          "cwe": "CWE-200",
+          "cvss": 3.1,
+          "confidence": 0.95,
+          "verification_status": "observed",
+          "endpoint": "http://127.0.0.1:8088",
+          "parameter": "Response Headers",
+          "evidence": "Server: SimpleHTTP/0.6 Python/3.9.6",
+          "remediation": "Configure reverse proxies or web servers to strip diagnostic technology banners.",
+          "tool_source": "whatweb-python-fallback"
+        }
+      ],
+      "raw_output": "Python HTTP response header technology audit completed."
+    },
+    "sslscan": {
+      "tool": "sslscan",
+      "status": "skipped_plain_http",
+      "findings": [],
+      "raw_output": "Target is not using HTTPS scheme."
+    },
+    "nikto": {
+      "tool": "nikto",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [],
+      "raw_output": "Python defensive misconfiguration probe completed."
+    },
+    "dnsrecon": {
+      "tool": "dnsrecon",
+      "mode": "kali_native",
+      "status": "completed",
+      "findings": [
+        {
+          "title": "Missing or Weak SPF Email Authentication Record",
+          "severity": "Low",
+          "cwe": "CWE-346",
+          "cvss": 3.8,
+          "confidence": 0.88,
+          "verification_status": "observed",
+          "endpoint": "127.0.0.1",
+          "parameter": "DNS TXT (SPF)",
+          "evidence": "No valid v=spf1 TXT record found for root hostname.",
+          "remediation": "Publish an SPF record ('v=spf1 ... -all') to protect against email spoofing.",
+          "tool_source": "dig-cli"
+        }
+      ],
+      "raw_output": ""
+    }
+  },
+  "llm_analysis": null,
+  "findings": [
+    {
+      "id": "HDR-003",
+      "title": "Missing X-Frame-Options (Clickjacking Protection)",
+      "severity": "Critical",
+      "confidence": 0.51,
+      "category": "Security Headers",
+      "endpoint": "http://127.0.0.1:8088/",
+      "parameter": null,
+      "evidence": "Header 'X-Frame-Options' not defined in HTTP response.",
+      "description": "The X-Frame-Options header indicates whether a browser should be allowed to render a page in a <frame>, <iframe>, or <embed>.",
+      "impact": "Adversaries could frame the endpoint on a malicious site and perform UI redress / clickjacking attacks.",
+      "remediation": "Set: X-Frame-Options: DENY (or SAMEORIGIN).",
+      "cwe": "CWE-1021",
+      "cvss": 4.3,
+      "references": [
+        "https://owasp.org/www-community/attacks/Clickjacking"
+      ],
+      "verification_status": "confirmed",
+      "scope_status": "in_scope",
+      "manual_verification_required": false,
+      "manual_verification_notes": {},
+      "is_duplicate": false,
+      "duplicate_signature": "9e0d8445cf4d98cb53f02f034342d624",
+      "ml_assessment": {
+        "ml_adjusted_severity": "Critical",
+        "ml_confidence": 0.51,
+        "priority_score": 83,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 83,
+      "false_positive_risk": "Low"
+    },
+    {
+      "title": "Missing or Weak SPF Email Authentication Record",
+      "severity": "Critical",
+      "cwe": "CWE-346",
+      "cvss": 3.8,
+      "confidence": 0.41,
+      "verification_status": "observed",
+      "endpoint": "127.0.0.1",
+      "parameter": "DNS TXT (SPF)",
+      "evidence": "No valid v=spf1 TXT record found for root hostname.",
+      "remediation": "Publish an SPF record ('v=spf1 ... -all') to protect against email spoofing.",
+      "tool_source": "dig-cli",
+      "is_duplicate": false,
+      "duplicate_signature": "90a57262933be5d7a232eafc4ebd2088",
+      "ml_assessment": {
+        "ml_adjusted_severity": "Critical",
+        "ml_confidence": 0.41,
+        "priority_score": 81,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 81,
+      "false_positive_risk": "Low"
+    },
+    {
+      "id": "DISC-001",
+      "title": "Server Banner Version Disclosure: 'SimpleHTTP/0.6 Python/3.9.6'",
+      "severity": "High",
+      "confidence": 0.52,
+      "category": "Information Disclosure",
+      "endpoint": "http://127.0.0.1:8088/",
+      "parameter": null,
+      "evidence": "Server: SimpleHTTP/0.6 Python/3.9.6",
+      "description": "The Server response header discloses specific web server software and version numbers, aiding threat reconnaissance.",
+      "impact": "Adversaries can tailor specific CVE search queries against the revealed server release.",
+      "remediation": "Suppress or genericize the Server header in web server configuration (e.g. ServerTokens Prod).",
+      "cwe": "CWE-200",
+      "cvss": 4.0,
+      "references": [],
+      "verification_status": "confirmed",
+      "scope_status": "in_scope",
+      "manual_verification_required": false,
+      "manual_verification_notes": {},
+      "is_duplicate": false,
+      "duplicate_signature": "5acd0afdef302e5eaed1a1762359a9ca",
+      "ml_assessment": {
+        "ml_adjusted_severity": "High",
+        "ml_confidence": 0.52,
+        "priority_score": 68,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 68,
+      "false_positive_risk": "Low"
+    },
+    {
+      "id": "HDR-004",
+      "title": "Missing or Weak X-Content-Type-Options Header",
+      "severity": "High",
+      "confidence": 0.54,
+      "category": "Security Headers",
+      "endpoint": "http://127.0.0.1:8088/",
+      "parameter": null,
+      "evidence": "X-Content-Type-Options: Header Absent",
+      "description": "Lacks 'nosniff' directive, allowing browsers to MIME-sniff response bodies and execute malicious payloads masquerading as static files.",
+      "impact": "Increases risk of drive-by download attacks and XSS via uploaded files served with generic MIME types.",
+      "remediation": "Set: X-Content-Type-Options: nosniff on all responses.",
+      "cwe": "CWE-16",
+      "cvss": 3.7,
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options"
+      ],
+      "verification_status": "confirmed",
+      "scope_status": "in_scope",
+      "manual_verification_required": false,
+      "manual_verification_notes": {},
+      "is_duplicate": false,
+      "duplicate_signature": "eb88d776e65f10be7b071cc26b52b6ae",
+      "ml_assessment": {
+        "ml_adjusted_severity": "High",
+        "ml_confidence": 0.54,
+        "priority_score": 67,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 67,
+      "false_positive_risk": "Low"
+    },
+    {
+      "title": "Web Server / Technology Banner Exposed",
+      "severity": "High",
+      "cwe": "CWE-200",
+      "cvss": 3.1,
+      "confidence": 0.59,
+      "verification_status": "observed",
+      "endpoint": "http://127.0.0.1:8088",
+      "parameter": "Response Headers",
+      "evidence": "Server: SimpleHTTP/0.6 Python/3.9.6",
+      "remediation": "Configure reverse proxies or web servers to strip diagnostic technology banners.",
+      "tool_source": "whatweb-python-fallback",
+      "is_duplicate": false,
+      "duplicate_signature": "ce7ed77ea678ddfd3cda6586786ff41f",
+      "ml_assessment": {
+        "ml_adjusted_severity": "High",
+        "ml_confidence": 0.59,
+        "priority_score": 66,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 66,
+      "false_positive_risk": "Low"
+    },
+    {
+      "id": "HDR-005",
+      "title": "Missing Referrer-Policy Header",
+      "severity": "High",
+      "confidence": 0.67,
+      "category": "Security Headers",
+      "endpoint": "http://127.0.0.1:8088/",
+      "parameter": null,
+      "evidence": "Header 'Referrer-Policy' not defined.",
+      "description": "Controls how much referrer information is sent along with requests, preventing URI token and query parameter leakage.",
+      "impact": "Sensitive query string parameters (session tokens, email addresses) may leak to external domains in the HTTP Referer header.",
+      "remediation": "Set: Referrer-Policy: strict-origin-when-cross-origin",
+      "cwe": "CWE-200",
+      "cvss": 2.0,
+      "references": [],
+      "verification_status": "potential",
+      "scope_status": "in_scope",
+      "manual_verification_required": false,
+      "manual_verification_notes": {},
+      "is_duplicate": false,
+      "duplicate_signature": "2e1026a0ff56b027d4a3820c16a00c66",
+      "ml_assessment": {
+        "ml_adjusted_severity": "High",
+        "ml_confidence": 0.67,
+        "priority_score": 64,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 64,
+      "false_positive_risk": "Low"
+    },
+    {
+      "id": "HDR-002",
+      "title": "Missing Content-Security-Policy (CSP)",
+      "severity": "Low",
+      "confidence": 0.41,
+      "category": "Security Headers",
+      "endpoint": "http://127.0.0.1:8088/",
+      "parameter": null,
+      "evidence": "Header 'Content-Security-Policy' was absent in the HTTP response.",
+      "description": "Content Security Policy helps detect and mitigate Cross-Site Scripting (XSS), data injection, and unauthorized frame embedding.",
+      "impact": "Increases vulnerability to stored/reflected XSS and unauthorized malicious script execution.",
+      "remediation": "Define a restrictive Content-Security-Policy, e.g.: default-src 'self'; script-src 'self'; object-src 'none';",
+      "cwe": "CWE-1021",
+      "cvss": 6.1,
+      "references": [
+        "https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP"
+      ],
+      "verification_status": "confirmed",
+      "scope_status": "in_scope",
+      "manual_verification_required": false,
+      "manual_verification_notes": {},
+      "is_duplicate": false,
+      "duplicate_signature": "2ed7ac139b8d76436297a670c7afa544",
+      "ml_assessment": {
+        "ml_adjusted_severity": "Low",
+        "ml_confidence": 0.41,
+        "priority_score": 31,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 31,
+      "false_positive_risk": "Low"
+    }
+  ]
+}

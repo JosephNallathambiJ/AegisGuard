@@ -1,0 +1,42 @@
+{
+  "scan_id": "bb-20261007085935-a931a9",
+  "target_url": "https://coe.dsce.ac.in/",
+  "policy_profile": "Bug Bounty Standard",
+  "timestamp": "2026-10-07T08:59:11.466564+00:00",
+  "duration_seconds": 2.03,
+  "status_code": 200,
+  "blocked_redirects_count": 0,
+  "scheduler_telemetry": {
+    "target_host": "coe.dsce.ac.in",
+    "requests_sent": 5,
+    "requests_remaining": 95,
+    "max_requests_per_host": 100,
+    "configured_rps": 2.0,
+    "current_effective_rate": 2.47,
+    "elapsed_time_seconds": 2.02
+  },
+  "metadata": {
+    "program": "HackerOne / Bugcrowd Authorized Assessment",
+    "hostname": "coe.dsce.ac.in",
+    "scheme": "https",
+    "port": 443,
+    "policy_profile": "Bug Bounty Standard",
+    "allow_local_lab": false,
+    "max_rps": 2.0,
+    "path": "/",
+    "tech_stack": {
+      "web_servers": [
+        "Apache"
+      ],
+      "frameworks": [],
+      "languages": [
+        "PHP"
+      ]
+    }
+  },
+  "severity_summary": {
+    "Critical": 0,
+    "High": 0,
+    "Medium": 0,
+    "Low": 0,
+    "Informational": 0

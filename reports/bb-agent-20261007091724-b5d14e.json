@@ -1,0 +1,174 @@
+{
+  "scan_id": "bb-agent-20261007091724-b5d14e",
+  "target_url": "http://testphp.vulnweb.com",
+  "policy_profile": "Bug Bounty Standard",
+  "timestamp": "2026-10-07T09:17:24.737675+00:00",
+  "duration_seconds": 58.43,
+  "status_code": 200,
+  "blocked_redirects_count": 0,
+  "scheduler_telemetry": {},
+  "metadata": {
+    "program": "HackerOne / Bugcrowd Authorized Assessment",
+    "hostname": "testphp.vulnweb.com",
+    "scheme": "http",
+    "port": 80,
+    "policy_profile": "Bug Bounty Standard",
+    "allow_local_lab": false,
+    "max_rps": 2.0,
+    "path": "/"
+  },
+  "severity_summary": {
+    "Critical": 0,
+    "High": 0,
+    "Medium": 0,
+    "Low": 0,
+    "Informational": 0,
+    "4": 1,
+    "3": 1
+  },
+  "total_findings": 2,
+  "ml_enhanced": true,
+  "agent_plan": {
+    "target_url": "http://testphp.vulnweb.com",
+    "policy_profile": "Bug Bounty Standard",
+    "planned_tools": [
+      "core_http_probes",
+      "whatweb",
+      "dns_recon",
+      "nmap_services",
+      "nikto_misconfig"
+    ],
+    "planning_rationale": [
+      "Target scheme: HTTP (Unencrypted transport)",
+      "Scope check verified via ScopeManager policies.",
+      "Enforcing non-destructive banner, header, and configuration audits only."
+    ],
+    "timestamp": "2026-10-07T09:17:24.738107+00:00"
+  },
+  "kali_tools_telemetry": {
+    "nmap": {
+      "tool": "nmap",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [
+        {
+          "title": "Exposed Web Port: 80/tcp",
+          "severity": "Informational",
+          "cwe": "CWE-200",
+          "cvss": 2.0,
+          "confidence": 0.9,
+          "verification_status": "observed",
+          "endpoint": "testphp.vulnweb.com:80",
+          "parameter": "tcp/80",
+          "evidence": "Socket connection succeeded on port 80.",
+          "remediation": "Ensure port is intentionally exposed and protected with rate limiting.",
+          "tool_source": "nmap-python-fallback"
+        }
+      ],
+      "raw_output": "Python TCP socket connection probe completed for testphp.vulnweb.com."
+    },
+    "whatweb": {
+      "tool": "whatweb",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [],
+      "raw_output": "Python HTTP response header technology audit completed."
+    },
+    "sslscan": {
+      "tool": "sslscan",
+      "status": "skipped_plain_http",
+      "findings": [],
+      "raw_output": "Target is not using HTTPS scheme."
+    },
+    "nikto": {
+      "tool": "nikto",
+      "mode": "python_fallback",
+      "status": "completed",
+      "findings": [],
+      "raw_output": "Python defensive misconfiguration probe completed."
+    },
+    "dnsrecon": {
+      "tool": "dnsrecon",
+      "mode": "kali_native",
+      "status": "completed",
+      "findings": [
+        {
+          "title": "Missing or Weak SPF Email Authentication Record",
+          "severity": "Low",
+          "cwe": "CWE-346",
+          "cvss": 3.8,
+          "confidence": 0.88,
+          "verification_status": "observed",
+          "endpoint": "testphp.vulnweb.com",
+          "parameter": "DNS TXT (SPF)",
+          "evidence": "No valid v=spf1 TXT record found for root hostname.",
+          "remediation": "Publish an SPF record ('v=spf1 ... -all') to protect against email spoofing.",
+          "tool_source": "dig-cli"
+        }
+      ],
+      "raw_output": "testphp.vulnweb.com.\t10800\tIN\tA\t44.228.249.3\ntestphp.vulnweb.com.\t10800\tIN\tTXT\t\"google-site-verification:toEctYsulNIxgraKk7H3z58PCyz2IOCc36pIupEPmYQ\"\n"
+    }
+  },
+  "llm_analysis": {
+    "executive_summary": "1. **Executive Summary**  \nThe target exhibits minimal email security defenses (missing SPF) and exposes a common web service (HTTP/80) without encryption. Defensive posture is weak, with no visible mitigation for standard vulnerabilities.  \n\n2. **Security Impact Analysis**  \n- **Missing SPF**: Enables email spoofing, increasing phishing risk and reputational damage.  \n- **Exposed Port 80**: Incre...",
+    "risk_prioritization": "Synthesized via local qwen3:latest model inference.",
+    "remediation_roadmap": [
+      "Review and implement specific headers identified by Qwen3.",
+      "Harden cookie flags and CORS directives across all origin endpoints.",
+      "Enforce TLS 1.2+ and renew expiring certificates."
+    ],
+    "bug_bounty_draft": "1. **Executive Summary**  \nThe target exhibits minimal email security defenses (missing SPF) and exposes a common web service (HTTP/80) without encryption. Defensive posture is weak, with no visible mitigation for standard vulnerabilities.  \n\n2. **Security Impact Analysis**  \n- **Missing SPF**: Enables email spoofing, increasing phishing risk and reputational damage.  \n- **Exposed Port 80**: Increases attack surface for exploitation of outdated HTTP services, potential data exfiltration, or lateral movement.  \n\n3. **Prioritized Remed",
+    "qwen3_reasoning_trace": "Okay, let's tackle this query. The user is a security professional looking to assess the defensive posture of the target http://testphp.vulnweb.com. They've identified two findings: a missing or weak SPF record and an exposed web port 80/tcp. \n\nFirst, I need to create an executive summary. The target has basic email security issues and an exposed service. Since it's a known vulnerable site, the defenses are minimal. \n\nFor the security impact, the SPF issue could lead to email spoofing, which mig...",
+    "llm_engine_used": "Local Ollama (qwen3:latest)"
+  },
+  "findings": [
+    {
+      "title": "Missing or Weak SPF Email Authentication Record",
+      "severity": "4",
+      "cwe": "CWE-346",
+      "cvss": 3.8,
+      "confidence": 0.41,
+      "verification_status": "observed",
+      "endpoint": "testphp.vulnweb.com",
+      "parameter": "DNS TXT (SPF)",
+      "evidence": "No valid v=spf1 TXT record found for root hostname.",
+      "remediation": "Publish an SPF record ('v=spf1 ... -all') to protect against email spoofing.",
+      "tool_source": "dig-cli",
+      "is_duplicate": false,
+      "duplicate_signature": "419ae7591222bf0664d9e193ea4f19ba",
+      "ml_assessment": {
+        "ml_adjusted_severity": "4",
+        "ml_confidence": 0.41,
+        "priority_score": 32,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 32,
+      "false_positive_risk": "Low"
+    },
+    {
+      "title": "Exposed Web Port: 80/tcp",
+      "severity": "3",
+      "cwe": "CWE-200",
+      "cvss": 2.0,
+      "confidence": 0.67,
+      "verification_status": "observed",
+      "endpoint": "testphp.vulnweb.com:80",
+      "parameter": "tcp/80",
+      "evidence": "Socket connection succeeded on port 80.",
+      "remediation": "Ensure port is intentionally exposed and protected with rate limiting.",
+      "tool_source": "nmap-python-fallback",
+      "is_duplicate": false,
+      "duplicate_signature": "a996c5f4a64f611c0a89641265a8a60f",
+      "ml_assessment": {
+        "ml_adjusted_severity": "3",
+        "ml_confidence": 0.67,
+        "priority_score": 29,
+        "is_likely_false_positive": false,
+        "inference_source": "Scikit-Learn (RandomForest)"
+      },
+      "priority_score": 29,
+      "false_positive_risk": "Low"
+    }
+  ]
+}

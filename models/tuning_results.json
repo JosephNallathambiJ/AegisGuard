@@ -1,0 +1,16 @@
+{
+  "random_seed": 42,
+  "best_rf_f1": 0.763896775738881,
+  "best_rf_params": {
+    "criterion": "gini",
+    "max_depth": null,
+    "min_samples_split": 2,
+    "n_estimators": 50
+  },
+  "best_pytorch_val_f1": 0.6682692307692308,
+  "best_pytorch_config": {
+    "hidden_dim": 32,
+    "learning_rate": 0.005,
+    "dropout_rate": 0.3
+  }
+}

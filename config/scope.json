@@ -1,0 +1,23 @@
+{
+  "program": "HackerOne / Bugcrowd Authorized Assessment",
+  "authorized": true,
+  "targets": [
+    "*.example.com",
+    "api.example.com",
+    "testphp.vulnweb.com",
+    "localhost",
+    "127.0.0.1",
+    "coe.dsce.ac.in",
+    "192.168.100.232"
+  ],
+  "excluded_targets": [
+    "none"
+  ],
+  "allowed_schemes": [
+    "https",
+    "http"
+  ],
+  "max_requests_per_second": 2.0,
+  "automated_scanning_allowed": true,
+  "program_rules_acknowledged": true
+}

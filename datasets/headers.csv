@@ -1,0 +1,11 @@
+header_name,expected_value,risk_level,description,recommendation
+Strict-Transport-Security,max-age=31536000; includeSubDomains; preload,Medium,Enforces secure TLS transport for modern browsers.,Set Strict-Transport-Security to at least 1 year with includeSubDomains.
+Content-Security-Policy,"default-src 'self'",Medium,Restricts authorized sources of scripts and resources.,Define a strict CSP policy that eliminates inline script execution.
+X-Frame-Options,DENY,Low,Defends against UI redress attacks (clickjacking).,Configure X-Frame-Options to DENY or SAMEORIGIN.
+X-Content-Type-Options,nosniff,Low,Disables MIME type sniffing for static assets.,Set X-Content-Type-Options: nosniff on all HTTP responses.
+Referrer-Policy,strict-origin-when-cross-origin,Low,Controls how much referrer information is sent along with requests.,Set Referrer-Policy to strict-origin-when-cross-origin or no-referrer.
+Permissions-Policy,"geolocation=(), camera=(), microphone=()",Informational,Restricts browser features and hardware APIs.,Specify Permissions-Policy to lock down unused browser device APIs.
+Cross-Origin-Opener-Policy,same-origin,Informational,Protects against cross-origin attacks by isolating browsing context.,Set Cross-Origin-Opener-Policy: same-origin.
+Cross-Origin-Embedder-Policy,require-corp,Informational,Prevents a document from loading any cross-origin resources that don't explicitly grant permission.,Enable COEP where resource isolation is required.
+Server,REDACTED,Low,Exposes server name and version string.,Strip or obfuscate the Server response header in proxy or web server config.
+X-Powered-By,REDACTED,Low,Exposes application runtime and framework stack.,Disable X-Powered-By in web framework configuration.

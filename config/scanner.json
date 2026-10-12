@@ -1,0 +1,20 @@
+{
+  "requests_per_second": 2.0,
+  "concurrency": 1,
+  "request_timeout": 8.0,
+  "max_requests_per_host": 100,
+  "user_agent": "AegisGuard/2.0 (Bug Bounty Security Assessment; Non-Destructive; RFC-9110)",
+  "redact_secrets": true,
+  "strict_redirect_scope": true,
+  "ollama_url": "http://localhost:11434/api/generate",
+  "ollama_model": "qwen3:latest",
+  "ollama_timeout": 65,
+  "log_level": "INFO",
+  "proxy": {
+    "enabled": false,
+    "host": "127.0.0.1",
+    "port": 8080,
+    "http": "http://127.0.0.1:8080",
+    "https": "http://127.0.0.1:8080"
+  }
+}
